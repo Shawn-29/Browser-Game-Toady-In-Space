@@ -1,0 +1,32 @@
+{
+    "tileTypes": [
+        {
+            "src": "TileBiz3.png",
+            "type": "TILE_PASS"
+        },
+        {
+            "src": "TileBiz4.png",
+            "type": "TILE_PASS"
+        },
+        {
+            "src": "TileBiz5.png",
+            "type": "TILE_PASS"
+        },
+        {
+            "src": "TileBiz1.png",
+            "type": "TILE_WALL"
+        },
+        {
+            "src": "TileBiz2.png",
+            "type": "TILE_WALL"
+        },
+        {
+            "src": "TileBiz6.png",
+            "type": "TILE_PASS"
+        },
+        {
+            "src": "TileGoal.png",
+            "type": "TILE_GOAL"
+        }
+    ]
+}

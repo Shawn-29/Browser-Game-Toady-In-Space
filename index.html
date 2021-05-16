@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="description" content="Toady in Space">
+    <meta name="theme-color" content="#4b4">
+	<title>Toady in Space</title>
+	<link rel="shortcut icon" href="./images/icons/Toady.ico" />
+    <link rel="stylesheet" href="./styles/project.css">
+    <link rel="manifest" href="manifest.json">
+    <script src='./src/main.js' type="module"></script>
+</head>
+<body>
+    <noscript><p>This game requires JavaScript to be enabled in your browser.</p></noscript>
+    <div>
+        <canvas id="game-canvas" width="640" height="360">
+            This game requires a browser that supports the canvas tag.
+        </canvas>
+        <canvas id="buffer" width="640" height="360" style="display: none;"></canvas>
+        <div id="camera-area" style="display: none;">
+            <div class="select">
+                <label for="video-source">Scanner: </label><select id="video-source"></select>
+                <button id='btn-scan'>Scan Barcode</button>
+                <button id='btn-cancel-scan'>Cancel</button>
+            </div>
+            <video muted autoplay id="video" playsinline="true"></video>
+        </div>
+    </div>
+
+	<!-- <script src="obj.js"></script>
+    <script src="enemy.js"></script>
+    <script src="item.js"></script>
+	<script src="project.js"></script>
+    <script async src="zxing.js"></script>
+    <script src="video.js"></script> -->
+</body>
+</html>

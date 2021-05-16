@@ -1,0 +1,39 @@
+/* CSS reset rules */
+*,
+*::after,
+*::before {
+    border: 0;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    background-color: #030;
+    font-size: 1rem;
+    overflow-y: hidden;
+}
+
+#camera-area {
+    color: #fb0;
+    font-family: 'sans-serif';
+    font-weight: bold;
+}
+
+#camera-area button {
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+#btn-scan {
+    background: linear-gradient(#ffff7f, #ff9600);
+}
+
+#btn-cancel-scan {
+    background: linear-gradient(#ffffaf, #ff2600);
+}
