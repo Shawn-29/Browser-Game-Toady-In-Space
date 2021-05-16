@@ -102,7 +102,7 @@ self.onload = () => {
     });
     
     const startGame = () => {
-        curScreen = new GameScreen(restartGame);
+        curScreen = new GameScreen(gameCanvas);
         curScreen.loadLevel();
     };
     
