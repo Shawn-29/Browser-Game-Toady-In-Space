@@ -4,7 +4,7 @@ import {TileMgr, checkTileBits} from '../tile_mgr.js';
 
 import {getImg} from '../utilities.js';
 
-import {BASE_MOVE_VEL, LEVEL_HEIGHT} from '../gameplay_constants.js';
+import {BASE_MOVE_VEL, CANVAS_BASE_WIDTH, LEVEL_HEIGHT} from '../gameplay_constants.js';
 
 export const SmileyBall = class extends Enemy {
     constructor(x, y) {
@@ -18,8 +18,8 @@ export const SmileyBall = class extends Enemy {
     update(dt, data = null) {
         super.update(dt, data);
         let xOffset = data['gameXPos'];
-        if (this.right - xOffset >= gameCanvas.width) {
-            this.setPos(gameCanvas.width + xOffset - (SmileyBall.img.width >> 1), this.y);
+        if (this.right - xOffset >= CANVAS_BASE_WIDTH) {
+            this.setPos(CANVAS_BASE_WIDTH + xOffset - (SmileyBall.img.width >> 1), this.y);
             this.reverseX();
         }
         else if (this.left - xOffset <= 0) {

@@ -87,7 +87,7 @@ const updateItemTimers = (dt) => {
 };
 
 export const GameScreen = class {
-    constructor() {
+    constructor(gameCanvas) {
 
         this.gameData = {
             'player': new Player(this.resetLevel.bind(this),
@@ -176,6 +176,8 @@ export const GameScreen = class {
         this.draw = this.drawSplash;
         this.levelDone = false;
         this.scoreBonus = 0;
+
+        this.gameCanvas = gameCanvas;
         
         self.addEventListener('keydown', this.keyDown.bind(this));
         self.addEventListener('keyup', this.keyUp.bind(this));
@@ -186,9 +188,9 @@ export const GameScreen = class {
         this.touchStartFn = this.touchStart.bind(this);
         this.touchEndFn = this.touchEnd.bind(this);
         this.touchMoveFn = this.touchMove.bind(this);
-        gameCanvas.addEventListener('touchstart', this.touchStartFn, false);
-        gameCanvas.addEventListener('touchend', this.touchEndFn, false);
-        gameCanvas.addEventListener('touchmove', this.touchMoveFn, false);
+        this.gameCanvas.addEventListener('touchstart', this.touchStartFn, false);
+        this.gameCanvas.addEventListener('touchend', this.touchEndFn, false);
+        this.gameCanvas.addEventListener('touchmove', this.touchMoveFn, false);
         
         this.gameOver = false;
         this.fadeStep = 0;
@@ -268,11 +270,11 @@ export const GameScreen = class {
         this.gameData['player'].update(dt, this.gameData);
     }
     drawSplash(context) {     
-        context.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+        context.clearRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
         context.fillStyle = "#000";
-        context.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+        context.fillRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
 
-        const grad = context.createLinearGradient(0, 0, gameCanvas.width, 0);
+        const grad = context.createLinearGradient(0, 0, this.gameCanvas.width, 0);
         grad.addColorStop("0", "#0b0");
 
         this.gradStops.stop1 = Math.min(1.0, this.gradStops.stop1 + 0.01);
@@ -292,18 +294,18 @@ export const GameScreen = class {
         context.textAlign = "center";
         context.fillStyle = grad;
         context.font = "58px Cooper Black";
-        context.fillText(`${this.gameData['levelName']}`, gameCanvas.width >> 1, 160);
+        context.fillText(`${this.gameData['levelName']}`, this.gameCanvas.width >> 1, 160);
         context.shadowColor = '#fb0';
         context.shadowOffsetX = -1;
         context.shadowOffsetY = 4;
         context.font = '36px Showcard Gothic';
         context.fillStyle = '#25bc37';
-        context.fillText('Get Ready!!', gameCanvas.width >> 1, 260);
+        context.fillText('Get Ready!!', this.gameCanvas.width >> 1, 260);
         context.restore();
     }
     drawTally(context) {
         context.fillStyle = 'rgba(0, 0, 0, 0.55)';
-        context.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+        context.fillRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
         context.font = '40px Showcard Gothic';
 
         context.save();
@@ -312,17 +314,17 @@ export const GameScreen = class {
         context.shadowOffsetX = -1;
         context.shadowOffsetY = 4;
         context.fillStyle = '#25bc37';
-        context.fillText(this.gameData['levelName'], gameCanvas.width >> 1, 100);
-        context.fillText('completed!!', gameCanvas.width >> 1, 180);
+        context.fillText(this.gameData['levelName'], this.gameCanvas.width >> 1, 100);
+        context.fillText('completed!!', this.gameCanvas.width >> 1, 180);
         context.shadowColor = '#f40';
         context.fillStyle = '#eee';
-        context.fillText(`HP Bonus: ${this.scoreBonus} pts.`, gameCanvas.width >> 1, 260);
+        context.fillText(`HP Bonus: ${this.scoreBonus} pts.`, this.gameCanvas.width >> 1, 260);
         context.restore();
     }
     drawGame(context) {
-        context.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+        context.clearRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
         context.fillStyle = "#d0d";
-        context.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+        context.fillRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
         
         if (this.gameData['loaded']) {
             
@@ -358,7 +360,7 @@ export const GameScreen = class {
         
         if (this.gameOver) {
             context.fillStyle = `rgba(0, 0, 0, ${this.fadeStep})`;
-            context.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+            context.fillRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
         }
         
         //return;
@@ -460,8 +462,8 @@ export const GameScreen = class {
         let gameScreen = this;
         
         //let levelStr = "./level_data/F2.json";
-        let levelStr = "./level_data/Level7.json";
-        // let levelStr = "./level_data/Level" + UserMgr.get().getData().level + ".json";
+        // let levelStr = "./level_data/Level5.json";
+        let levelStr = "./level_data/Level" + UserMgr.get().getData().level + ".json";
         
         fetch(levelStr)
         .then(function(response) {
@@ -851,9 +853,9 @@ export const GameScreen = class {
     exitGameScreen() {
         TileMgr.get().reset();
         ExpMgr.get().reset();
-        gameCanvas.removeEventListener('touchstart', this.touchStartFn, false);
-        gameCanvas.removeEventListener('touchend', this.touchEndFn, false);
-        gameCanvas.removeEventListener('touchmove', this.touchMoveFn, false);
+        this.gameCanvas.removeEventListener('touchstart', this.touchStartFn, false);
+        this.gameCanvas.removeEventListener('touchend', this.touchEndFn, false);
+        this.gameCanvas.removeEventListener('touchmove', this.touchMoveFn, false);
         self.removeEventListener('bossdone', this.bossDoneFn, false);
     }
 };

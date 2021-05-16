@@ -4,7 +4,7 @@ import {TileMgr, checkTileBits, TILE_TYPES} from '../tile_mgr.js';
 
 import {getImg} from '../utilities.js';
 
-import {BASE_MOVE_VEL} from '../gameplay_constants.js';
+import {BASE_MOVE_VEL, CANVAS_BASE_HEIGHT, CANVAS_BASE_WIDTH} from '../gameplay_constants.js';
 
 export const ShotLazer = class extends Shot {
     constructor() {
@@ -42,7 +42,7 @@ export const ShotLazer = class extends Shot {
             }
             
             if (this.lazerSm[1].fired) {
-                if (this.lazerSm[1].bot >= gameCanvas.height) {
+                if (this.lazerSm[1].bot >= CANVAS_BASE_HEIGHT) {
                     this.lazerSm[1].fired = false;
                 }
                 else {
@@ -70,7 +70,7 @@ export const ShotLazer = class extends Shot {
         }
         else if (this.fired) {
             let xM = this.vel[0] * dt;
-            if (this.left >= gameCanvas.width) {
+            if (this.left >= CANVAS_BASE_WIDTH) {
                 this.fired = false;
             }
             else {

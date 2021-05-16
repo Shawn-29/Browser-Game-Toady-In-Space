@@ -4,6 +4,8 @@ import {Timer} from '../timer.js';
 
 import {drawHitFrame, getImg} from '../utilities.js';
 
+import {CANVAS_BASE_WIDTH} from '../gameplay_constants.js';
+
 export class Clinger extends Enemy {
     constructor(x, y) {
         super(40, 44, 60, x, y);
@@ -16,7 +18,7 @@ export class Clinger extends Enemy {
     update(dt, data = null) {
         super.update(dt, data);
         
-        this.setPos(gameCanvas.width - Clinger.img.width * 0.5 + data['gameXPos'], this.y);
+        this.setPos(CANVAS_BASE_WIDTH - Clinger.img.width * 0.5 + data['gameXPos'], this.y);
         
         this.shotDelay.update(dt, data);
         if (this.shotDelay.done) {

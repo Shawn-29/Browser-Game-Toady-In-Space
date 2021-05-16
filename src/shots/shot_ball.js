@@ -5,7 +5,7 @@ import {Timer} from '../timer.js';
 
 import {getImg} from '../utilities.js';
 
-import {BASE_MOVE_VEL, LEVEL_HEIGHT} from '../gameplay_constants.js';
+import {BASE_MOVE_VEL, CANVAS_BASE_WIDTH, LEVEL_HEIGHT} from '../gameplay_constants.js';
 
 export const ShotBall = class extends Shot {
     constructor() {
@@ -21,8 +21,8 @@ export const ShotBall = class extends Shot {
         if (this.fired) {
             this.sparkTimer.update(dt);
             
-            if (this.right >= gameCanvas.width) {
-                this.setPos(gameCanvas.width - (ShotBall.img.width >> 1), this.y);
+            if (this.right >= CANVAS_BASE_WIDTH) {
+                this.setPos(CANVAS_BASE_WIDTH - (ShotBall.img.width >> 1), this.y);
                 this.reverseX();
             }
             else if (this.left <= 0) {

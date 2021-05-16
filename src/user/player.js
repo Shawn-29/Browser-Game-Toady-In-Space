@@ -9,6 +9,8 @@ import {getImg} from '../utilities.js';
 
 import {
     BASE_MOVE_VEL,
+    CANVAS_BASE_HEIGHT,
+    CANVAS_BASE_WIDTH,
     DASH_BOOST,
     HAZARD_DMG,
     LEVEL_HEIGHT,
@@ -92,7 +94,7 @@ export const Player = class extends Rect {
             this.blinkTimer.update(dt, data);
             if (this.blinkTimer.done) {
                 this.move(0, ~~(BASE_MOVE_VEL * 1.5 * dt));
-                if (this.top > gameCanvas.height * 2) {
+                if (this.top > CANVAS_BASE_HEIGHT * 2) {
                     this.action &= ~ACTION_KO;
                     this.onKO();
                 }
@@ -283,8 +285,8 @@ export const Player = class extends Rect {
             else if (this.left + xM <= 0) {
                 xM = -this.left;
             }
-            else if (this.right + xM >= gameCanvas.width) {
-                xM = gameCanvas.width - this.right;
+            else if (this.right + xM >= CANVAS_BASE_WIDTH) {
+                xM = CANVAS_BASE_WIDTH - this.right;
             }
             else if (result & TILE_TYPES['TILE_HAZARD']) {
                 this.setHp(HAZARD_DMG);

@@ -3,7 +3,7 @@ import {TileMgr, checkTileBits, TILE_TYPES} from '../tile_mgr.js';
 
 import {getImg} from '../utilities.js';
 
-import {BASE_MOVE_VEL} from '../gameplay_constants.js';
+import {BASE_MOVE_VEL, CANVAS_BASE_WIDTH} from '../gameplay_constants.js';
 
 export const ShotRegular = class extends Shot {
     constructor() {
@@ -15,7 +15,7 @@ export const ShotRegular = class extends Shot {
             
             let xM = this.vel[0] * dt;
             
-            if (this.left >= gameCanvas.width) {
+            if (this.left >= CANVAS_BASE_WIDTH) {
                 this.fired = false;
             }
             else {

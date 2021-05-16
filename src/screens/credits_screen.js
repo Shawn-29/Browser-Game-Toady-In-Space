@@ -40,7 +40,7 @@ export const CreditsScreen = class {
             ['Space Barge', Boss.imgs[0]], ['Toady!', getImg('./images/player/Toady.png')]
         ];
         this.imgInd = -1;
-        this.textX = gameCanvas.width >> 1;
+        this.textX = CANVAS_BASE_WIDTH >> 1;
         this.name = '';
         this.epilogue = '';
         
@@ -64,9 +64,9 @@ export const CreditsScreen = class {
         this.timer.update(dt);
     }
     draw(context) {
-        context.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+        context.clearRect(0, 0, CANVAS_BASE_WIDTH, CANVAS_BASE_HEIGHT);
         context.fillStyle = "#000";
-        context.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+        context.fillRect(0, 0, CANVAS_BASE_WIDTH, CANVAS_BASE_HEIGHT);
         
         this.modal.draw(context);
         
