@@ -31,6 +31,7 @@ export const TileMgr = Object.seal({
             TM_tileXDrawOffset = 0,
             TM_scrollDone = false,
             TM_scrollX = 0,
+            TM_numCols = 0,
 
             isWrapDone = false,
             wraps = true,
@@ -51,6 +52,8 @@ export const TileMgr = Object.seal({
                 for (const t of tiles) {
                     TM_tiles.push(t);
                 }
+
+                TM_numCols = TM_tiles[0].length;
             },
             setTile(row, col, type) {
                 try {
@@ -120,7 +123,7 @@ export const TileMgr = Object.seal({
                     TM_scrollX = data['gameXPos'];
 
                     /* check if the end of the level has been reached */
-                    // if (TM_tileDrawLimit >= TM_tiles[0].length) {
+                    if (TM_tileDrawLimit >= TM_numCols) {
                     //     console.log('gameXPos', data['gameXPos']);
                     //     if (wrapped) {
 
@@ -155,7 +158,7 @@ export const TileMgr = Object.seal({
                                 is no longer scrolling */
                             --TM_tileDrawLimit;
                     //     }
-                    // }
+                    }
                 }
             },
             isDone() { return TM_scrollDone; },
@@ -165,6 +168,7 @@ export const TileMgr = Object.seal({
                 TM_tileTypes.length = 0;
                 TM_tiles.length = 0;
                 TM_scrollDone = false;
+                TM_numCols = 0;
             }
         };
     },
