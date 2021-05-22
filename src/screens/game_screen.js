@@ -462,7 +462,7 @@ export const GameScreen = class {
         let gameScreen = this;
         
         //let levelStr = "./level_data/F2.json";
-        // let levelStr = "./level_data/Level5.json";
+        // let levelStr = "./level_data/Level7.json";
         let levelStr = "./level_data/Level" + UserMgr.get().getData().level + ".json";
         
         fetch(levelStr)

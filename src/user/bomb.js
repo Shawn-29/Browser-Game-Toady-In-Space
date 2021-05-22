@@ -95,10 +95,10 @@ export const Bomb = class extends Rect {
     }
 };
 Bomb.imgs = [
-    getImg('./images/weapons/BombA.png'),
-    getImg('./images/weapons/BombB.png'),
-    getImg('./images/weapons/BombC.png'),
-    getImg('./images/weapons/BombD.png'),
-    getImg('./images/weapons/BombC.png'),
-    getImg('./images/weapons/BombB.png')
+    getImg('./images/shots/BombA.png'),
+    getImg('./images/shots/BombB.png'),
+    getImg('./images/shots/BombC.png'),
+    getImg('./images/shots/BombD.png'),
+    getImg('./images/shots/BombC.png'),
+    getImg('./images/shots/BombB.png')
 ];

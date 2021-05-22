@@ -125,7 +125,7 @@ export const ShotLazer = class extends Shot {
 };
 ShotLazer.power = 20;
 ShotLazer.imgs = [
-    getImg('./images/weapons/ShotLazerA.png'),
-    getImg('./images/weapons/ShotLazerB.png')
+    getImg('./images/shots/ShotLazerA.png'),
+    getImg('./images/shots/ShotLazerB.png')
 ];
 ShotLazer.imgIcon = getImg('./images/icons/IconLazer.png');

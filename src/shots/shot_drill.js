@@ -48,7 +48,7 @@ export const ShotDrill = class extends Shot {
 };
 ShotDrill.power = 6;
 ShotDrill.imgs = [
-    getImg('./images/weapons/ShotDrillA.png'),
-    getImg('./images/weapons/ShotDrillB.png')
+    getImg('./images/shots/ShotDrillA.png'),
+    getImg('./images/shots/ShotDrillB.png')
 ];
 ShotDrill.imgIcon = getImg('./images/icons/IconDrill.png');

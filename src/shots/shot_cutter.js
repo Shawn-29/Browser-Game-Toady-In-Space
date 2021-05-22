@@ -79,5 +79,5 @@ export const ShotCutter = class extends Shot {
     static getDelay() { return 2; }
 };
 ShotCutter.power = 10;
-ShotCutter.img = getImg('./images/weapons/ShotCutter.png');
+ShotCutter.img = getImg('./images/shots/ShotCutter.png');
 ShotCutter.imgIcon = getImg('./images/icons/IconCutter.png');

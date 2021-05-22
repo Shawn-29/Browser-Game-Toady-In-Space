@@ -53,5 +53,5 @@ export const ShotFireWave = class extends Shot {
     static getDelay() { return 0.01; }    
 };
 ShotFireWave.power = 6;
-ShotFireWave.img = getImg('./images/weapons/ShotFireWave.png');
+ShotFireWave.img = getImg('./images/shots/ShotFireWave.png');
 ShotFireWave.imgIcon = getImg('./images/icons/IconFireWave.png');

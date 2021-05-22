@@ -77,8 +77,8 @@ export const ShotBeam = class extends Shot {
 };
 ShotBeam.power = 10;
 ShotBeam.imgs = [
-    getImg('./images/weapons/BeamA.png'),
-    getImg('./images/weapons/BeamB.png'),
+    getImg('./images/shots/BeamA.png'),
+    getImg('./images/shots/BeamB.png'),
     getImg('./images/player/ChargeUp.png')
 ];
 ShotBeam.imgIcon = getImg('./images/icons/IconBeam.png');
