@@ -29,7 +29,8 @@ export const getImg = (filename) => {
 };
 
 export const getTimestamp = () => {
-    return window?.performance?.now?.() ?? new Date().getTime();
+    // return window?.performance?.now?.() ?? new Date().getTime();
+    return window.performance && window.performance.now ? window.performance.now() : new Date().getTime();
 };
 
 export const randBool = () => Math.random() >= .5;
