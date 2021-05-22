@@ -166,10 +166,9 @@ const filesToCache = [
   '../level_data/Level3.json',
   '../level_data/Level4.json',
   '../level_data/Level5.json',
-  '../level_data/bizarre_tiles.json',
+  '../tile_data/bizarre_tiles.json',
   '../tile_data/eurth_tiles.json',
   '../tile_data/space_tiles.json',
-  './img_loader.js'
 ];
 
 self.addEventListener('install', (e) => {
