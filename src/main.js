@@ -86,10 +86,6 @@ self.onload = () => {
         curScreen.mouseDown(e);        
     };
     
-    const restartGame = () => {
-        curScreen = new TitleScreen();
-    };
-    
     self.addEventListener('mousedown', screenTransition);
 
     self.addEventListener('gamedone', (e) => {
@@ -109,8 +105,7 @@ self.onload = () => {
     //startGame(); // DEBUG
     
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.
-        register('service-worker.js')
+        navigator.serviceWorker.register('./src/service_worker.js')
         .then((registration) => {
             console.log(registration.scope);
         });
