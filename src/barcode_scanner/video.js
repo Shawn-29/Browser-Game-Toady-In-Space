@@ -1,5 +1,3 @@
-import {ZXing} from './zxing.js'
-
 import {
     CANVAS_BASE_HEIGHT,
     CANVAS_BASE_WIDTH,
@@ -16,6 +14,7 @@ export const hideCamera = () => {
 };
 
 export const scan = () => {
+    console.log('Attempting to scan...');
     scannerPaused = false;
     scanBarcode();
 };
@@ -42,21 +41,22 @@ let scannerPaused = false;
 
 let isPC = true;
 
-let scanner = null;
-
 let decodePtr = null;
 
-const tick = function () {
-    if (window.ZXing) {
-        scanner = ZXing();
-        decodePtr = scanner.Runtime.addFunction(decodeCallback);
+let ZXing = null;
+
+const tick = () => {
+    if (typeof window.ZXing === 'function') {
+        debugger;
+        ZXing = window.ZXing();
+        decodePtr = ZXing.Runtime.addFunction(decodeCallback);
     } else {
         setTimeout(tick, 10);
     }
 };
 
 const decodeCallback = (ptr, len, resultIndex, resultCount) => {
-    const result = new Uint8Array(scanner.HEAPU8.buffer, ptr, len);
+    const result = new Uint8Array(ZXing.HEAPU8.buffer, ptr, len);
     console.log(String.fromCharCode.apply(null, result));
     barcode_result = String.fromCharCode.apply(null, result);
     
@@ -109,11 +109,14 @@ const dataURItoBlob = (dataURI) => {
 
 // scan barcode
 const scanBarcode = () => {
-    if (scannerPaused)
+    if (scannerPaused) {
+        console.log('Can\'t scan because the ZXing is paused.');
         return;
+    }
 
-    if (scanner == null) {
+    if (ZXing == null) {
         // Barcode Reader is not ready!
+        console.log('Can\'t scan because the ZXing is not ready.');
         return;
     }
 
@@ -154,15 +157,15 @@ const scanBarcode = () => {
         // read barcode
         const imageData = barcodeContext.getImageData(0, 0, imageWidth, imageHeight),
             idd = imageData.data,
-            image = scanner._resize(imageWidth, imageHeight);
+            image = ZXing._resize(imageWidth, imageHeight);
 
         console.time("decode barcode");
 
         for (let i = 0, j = 0; i < idd.length; i += 4, j++) {
-            scanner.HEAPU8[image + j] = idd[i];
+            ZXing.HEAPU8[image + j] = idd[i];
         }
 
-        const err = scanner._decode_any(decodePtr);
+        const err = ZXing._decode_any(decodePtr);
 
         console.timeEnd('decode barcode');
 
