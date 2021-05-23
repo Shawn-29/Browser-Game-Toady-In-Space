@@ -14,7 +14,7 @@ html {
 }
 
 body {
-    background-color: #030;
+    background-color: #000;
     font-size: 1rem;
     overflow-y: hidden;
 }
@@ -36,4 +36,8 @@ body {
 
 #btn-cancel-scan {
     background: linear-gradient(#ffffaf, #ff2600);
+}
+
+.btn {
+    padding: .5rem;
 }
