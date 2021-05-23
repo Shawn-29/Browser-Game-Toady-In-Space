@@ -9,6 +9,7 @@
 	<link rel="shortcut icon" href="./images/icons/Toady.ico" />
     <link rel="stylesheet" href="./styles/project.css">
     <link rel="manifest" href="manifest.json">
+    <script defer src='./src/barcode_scanner/zxing.js'></script>
     <script src='./src/main.js' type="module"></script>
 </head>
 <body>
@@ -21,8 +22,8 @@
         <div id="camera-area" style="display: none;">
             <div class="select">
                 <label for="video-source">Scanner: </label><select id="video-source"></select>
-                <button id='btn-scan'>Scan Barcode</button>
-                <button id='btn-cancel-scan'>Cancel</button>
+                <button class='btn' id='btn-scan'>Scan Barcode</button>
+                <button class='btn' id='btn-cancel-scan'>Cancel</button>
             </div>
             <video muted autoplay id="video" playsinline="true"></video>
         </div>
