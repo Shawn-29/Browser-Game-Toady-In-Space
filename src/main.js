@@ -1,10 +1,11 @@
+import {BarcodeMgr} from './barcode_scanner/video.js';
 import {CreditsScreen} from './screens/credits_screen.js';
 import {GameScreen} from './screens/game_screen.js';
 import {OptionsScreen} from './screens/options_screen.js';
 import {TitleScreen} from './screens/title_screen.js';
 
 import {getTimestamp} from './utilities.js';
-import {hideCamera, scan} from './barcode_scanner/video.js';
+// import {hideCamera, scan} from './barcode_scanner/video.js';
 
 import {CANVAS_BASE_HEIGHT, CANVAS_BASE_WIDTH} from './gameplay_constants.js';
 
@@ -46,8 +47,8 @@ self.onload = () => {
     self.addEventListener('resize', resizeGame);
     self.addEventListener('orientationchange', resizeGame);
 
-    btnScan.addEventListener('click', scan, false);
-    btnCancelScan.addEventListener('click', hideCamera, false);
+    btnScan.addEventListener('click', BarcodeMgr.get().scan, false);
+    btnCancelScan.addEventListener('click', BarcodeMgr.get().hideCamera, false);
     
     resizeGame();
     

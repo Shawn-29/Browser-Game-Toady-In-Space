@@ -21,7 +21,7 @@ const TileType = class {
     }
 };
 
-export const TileMgr = Object.seal({
+export const TileMgr = {
     instance: null,
     createInstance() {
         let TM_tileTypes = [],
@@ -178,7 +178,7 @@ export const TileMgr = Object.seal({
         }
         return this.instance;
     }
-});
+};
 
 export const checkTileBits = (...tiles) => {
     let result = 0x0;
