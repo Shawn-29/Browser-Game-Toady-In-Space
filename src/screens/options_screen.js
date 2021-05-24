@@ -6,8 +6,9 @@ import {UserMgr} from '../user/user_mgr.js';
 import {getImg} from '../utilities.js';
 
 import {CANVAS_BASE_HEIGHT, CANVAS_BASE_WIDTH, MAX_PATHS} from '../gameplay_constants.js';
+import { BarcodeMgr } from '../barcode_scanner/video.js';
 
-import {barcode_result} from '../barcode_scanner/video.js';
+// import {barcode_result} from '../barcode_scanner/video.js';
 
 export const OptionsScreen = class {
     constructor(startGameFn) {
@@ -76,12 +77,15 @@ export const OptionsScreen = class {
         
         this.hidden = false;
         this.cameraDoneFn = function() {
-            // option screen can receive input again
+            /* option screen can receive input again */
             this.hidden = false;
-            // check if the barcode was read
+
+            const barcode_result = BarcodeMgr.get().getBarcode();
+
+            /* check if the barcode was read */
             if (barcode_result.length) {
-                // find the middle digit of the barcode string and
-                // grant secret shot type based on it
+                /* find the middle digit of the barcode string and
+                    grant secret shot type based on it */
                 if (parseInt(barcode_result[barcode_result.length >> 1]) < 5) {
                     UserMgr.get().getData().shotType = 'Drill';
                     this.secretModal.msg = 'Drill Obtained!';
@@ -95,12 +99,13 @@ export const OptionsScreen = class {
                 
                 this.activeBtn.setData(UserMgr.get().getData());
 
-                // write the awarded shot type to the current path
+                /* write the awarded shot type to the current path */
                 localStorage.userData = UserMgr.get().getStringJSON();
                 
-                // reset the barcode; user must scan a barcode again to
-                // be awarded with another secret shot type
-                barcode_result = '';
+                /* reset the barcode; user must scan a barcode again to
+                    be awarded with another secret shot type */
+                BarcodeMgr.get().resetBarcode();
+                // barcode_result = '';
             }          
         }.bind(this);
         self.addEventListener('cameradone', this.cameraDoneFn, false);
