@@ -121,7 +121,8 @@ export const BarcodeMgr = {
         
             let context = null,
                 width = 0,
-                height = 0;
+                height = 0,
+                dbrCanvas = null;
         
             if (isPC) {
                 context = ctx;
