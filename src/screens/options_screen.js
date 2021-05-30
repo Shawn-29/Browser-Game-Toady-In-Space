@@ -77,6 +77,10 @@ export const OptionsScreen = class {
         
         this.hidden = false;
         this.cameraDoneFn = function() {
+
+            /* make the game canvas visible again */
+            document.getElementById('game-canvas').style.display = 'block';
+
             /* option screen can receive input again */
             this.hidden = false;
 
@@ -113,7 +117,8 @@ export const OptionsScreen = class {
     startScan() {
         this.hidden = true;
         document.getElementById('game-canvas').style.display = 'none';
-        document.getElementById('camera-area').style.display = 'block';
+        BarcodeMgr.get().showCamera();
+        // document.getElementById('camera-area').style.display = 'block';
     }
     startGame() {
         self.removeEventListener('cameradone', this.cameraDoneFn, false);
