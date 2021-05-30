@@ -209,7 +209,7 @@ export const BarcodeMgr = {
                     else {
                         /* success if err !== -2? */
                         // this.hideCamera();
-                        BarcodeMgr.hideCamera();
+                        BarcodeMgr.get().hideCamera();
                     }
                 }
                 catch (e) {
