@@ -133,7 +133,7 @@ export const BarcodeMgr = {
             },
             hideCamera() {
                 scannerPaused = true;
-                document.getElementById('game-canvas').style.display = 'block';
+                // document.getElementById('game-canvas').style.display = 'block';
                 document.getElementById('camera-area').style.display = 'none';
                 self.dispatchEvent(EVENT_CAMERA_DONE);
             },
@@ -214,6 +214,10 @@ export const BarcodeMgr = {
                 catch (e) {
                     return;
                 }
+            },
+            showCamera() {
+                document.getElementById('camera-area').style.display = 'block';
+                scannerPaused = false;
             }
         };
     },
