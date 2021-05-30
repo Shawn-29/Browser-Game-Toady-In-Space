@@ -208,7 +208,8 @@ export const BarcodeMgr = {
                     }
                     else {
                         /* success if err !== -2? */
-                        this.hideCamera();
+                        // this.hideCamera();
+                        BarcodeMgr.hideCamera();
                     }
                 }
                 catch (e) {
