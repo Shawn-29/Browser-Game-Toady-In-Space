@@ -97,25 +97,16 @@ export const BarcodeMgr = {
         const handleError = (error) => {
             console.log('Error: ', error);
         };
-        
-        const tick = () => {
-            if (typeof window.ZXing === 'function') {
-                ZXing = window.ZXing();
-                decodePtr = ZXing.Runtime.addFunction(decodeCallback);
-            } else {
-                setTimeout(tick, 10);
-            }
-        };
 
         const scanBarcode = () => {
             if (scannerPaused) {
-                console.log('Can\'t scan because ZXing is paused.');
+                console.warn('Can\'t scan because ZXing is paused.');
                 return;
             }
         
             if (ZXing == null) {
                 // Barcode Reader is not ready!
-                console.log('Can\'t scan because ZXing is not ready.');
+                console.warn('Can\'t scan because ZXing is not ready.');
                 return;
             }
         
@@ -170,7 +161,12 @@ export const BarcodeMgr = {
         
                 console.log("error code", err);
                 if (err == -2) {
-                    setTimeout(scanBarcode, 30);
+                    console.warn('Barcode scan failed... try again.')
+                    // setTimeout(scanBarcode, 30);
+                }
+                else {
+                    /* success if err !== -2? */
+                    hideCamera();
                 }
             }
             catch (e) {
@@ -178,8 +174,25 @@ export const BarcodeMgr = {
             }
         };
 
+        if (typeof window.ZXing === 'function') {
+            ZXing = window.ZXing();
+            decodePtr = ZXing.Runtime.addFunction(decodeCallback);
+        }
+
+        // let tC = 0;
+        // const tick = () => {
+        //     ++tC;
+        //     console.log('tC:', tC);
+        //     if (typeof window.ZXing === 'function') {
+        //         ZXing = window.ZXing();
+        //         decodePtr = ZXing.Runtime.addFunction(decodeCallback);
+        //     } else {
+        //         setTimeout(tick, 10);
+        //     }
+        // };
+
         /* immediate function calls */
-        tick();
+        // tick();
 
         isPC = browserRedirect() === 'pc';
 
