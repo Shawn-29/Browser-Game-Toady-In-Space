@@ -91,87 +91,11 @@ export const BarcodeMgr = {
             console.log(String.fromCharCode.apply(null, result));
             barcode = String.fromCharCode.apply(null, result);
             
-            hideCamera();
+            // hideCamera();
         };
 
         const handleError = (error) => {
             console.log('Error: ', error);
-        };
-
-        const scanBarcode = () => {
-            if (scannerPaused) {
-                console.warn('Can\'t scan because ZXing is paused.');
-                return;
-            }
-        
-            if (ZXing == null) {
-                // Barcode Reader is not ready!
-                console.warn('Can\'t scan because ZXing is not ready.');
-                return;
-            }
-        
-            let context = null,
-                width = 0,
-                height = 0,
-                dbrCanvas = null;
-        
-            if (isPC) {
-                context = ctx;
-                width = videoWidth;
-                height = videoHeight;
-                dbrCanvas = canvas;
-            } else {
-                context = mobileCtx;
-                width = mobileVideoWidth;
-                height = mobileVideoHeight;
-                dbrCanvas = mobileCanvas;
-            }
-        
-            context.drawImage(videoElement, 0, 0, width, height);
-        
-            const vid = document.getElementById("video");
-            console.log("video width: " + vid.videoWidth + ", height: " + vid.videoHeight);
-        
-            const barcodeCanvas = document.createElement("canvas");
-            barcodeCanvas.width = vid.videoWidth;
-            barcodeCanvas.height = vid.videoHeight;
-        
-            const barcodeContext = barcodeCanvas.getContext('2d');
-        
-            const imageWidth = vid.videoWidth, imageHeight = vid.videoHeight;
-        
-            barcodeContext.drawImage(videoElement, 0, 0, imageWidth, imageHeight);
-            
-            try {
-            
-                // read barcode
-                const imageData = barcodeContext.getImageData(0, 0, imageWidth, imageHeight),
-                    idd = imageData.data,
-                    image = ZXing._resize(imageWidth, imageHeight);
-        
-                console.time("decode barcode");
-        
-                for (let i = 0, j = 0; i < idd.length; i += 4, j++) {
-                    ZXing.HEAPU8[image + j] = idd[i];
-                }
-        
-                const err = ZXing._decode_any(decodePtr);
-        
-                console.timeEnd('decode barcode');
-        
-                console.log("error code", err);
-                if (err == -2) {
-                    console.warn('Barcode scan failed... try again.')
-                    // setTimeout(scanBarcode, 30);
-                }
-                else {
-                    /* success if err !== -2? */
-                    hideCamera();
-                }
-            }
-            catch (e) {
-                return;
-            }
         };
 
         if (typeof window.ZXing === 'function') {
@@ -216,10 +140,80 @@ export const BarcodeMgr = {
             resetBarcode() {
                 barcode = '';
             },
-            scan() {
-                console.log('Attempting to scan...');
-                scannerPaused = false;
-                scanBarcode();
+            scanBarcode() {
+                if (scannerPaused) {
+                    console.warn('Can\'t scan because ZXing is paused.');
+                    return;
+                }
+            
+                if (ZXing == null) {
+                    // Barcode Reader is not ready!
+                    console.warn('Can\'t scan because ZXing is not ready.');
+                    return;
+                }
+            
+                let context = null,
+                    width = 0,
+                    height = 0,
+                    dbrCanvas = null;
+            
+                if (isPC) {
+                    context = ctx;
+                    width = videoWidth;
+                    height = videoHeight;
+                    dbrCanvas = canvas;
+                } else {
+                    context = mobileCtx;
+                    width = mobileVideoWidth;
+                    height = mobileVideoHeight;
+                    dbrCanvas = mobileCanvas;
+                }
+            
+                context.drawImage(videoElement, 0, 0, width, height);
+            
+                const vid = document.getElementById("video");
+                console.log("video width: " + vid.videoWidth + ", height: " + vid.videoHeight);
+            
+                const barcodeCanvas = document.createElement("canvas");
+                barcodeCanvas.width = vid.videoWidth;
+                barcodeCanvas.height = vid.videoHeight;
+            
+                const barcodeContext = barcodeCanvas.getContext('2d');
+            
+                const imageWidth = vid.videoWidth, imageHeight = vid.videoHeight;
+            
+                barcodeContext.drawImage(videoElement, 0, 0, imageWidth, imageHeight);
+                
+                try {
+                
+                    // read barcode
+                    const imageData = barcodeContext.getImageData(0, 0, imageWidth, imageHeight),
+                        idd = imageData.data,
+                        image = ZXing._resize(imageWidth, imageHeight);
+            
+                    // console.time("decode barcode");
+            
+                    for (let i = 0, j = 0; i < idd.length; i += 4, j++) {
+                        ZXing.HEAPU8[image + j] = idd[i];
+                    }
+            
+                    const err = ZXing._decode_any(decodePtr);
+            
+                    // console.timeEnd('decode barcode');
+            
+                    console.log("error code", err);
+                    if (err == -2) {
+                        console.warn('Barcode scan failed... try again.')
+                        // setTimeout(scanBarcode, 30);
+                    }
+                    else {
+                        /* success if err !== -2? */
+                        this.hideCamera();
+                    }
+                }
+                catch (e) {
+                    return;
+                }
             }
         };
     },
