@@ -47,7 +47,7 @@ self.onload = () => {
     self.addEventListener('resize', resizeGame);
     self.addEventListener('orientationchange', resizeGame);
 
-    btnScan.addEventListener('click', BarcodeMgr.get().scan, false);
+    btnScan.addEventListener('click', BarcodeMgr.get().scanBarcode, false);
     btnCancelScan.addEventListener('click', BarcodeMgr.get().hideCamera, false);
     
     resizeGame();
