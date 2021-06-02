@@ -331,7 +331,7 @@ export const GameScreen = class {
     }
     drawGame(context) {
         context.clearRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
-        context.fillStyle = "#d0d";
+        context.fillStyle = "#000";
         context.fillRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
         
         if (this.gameData['loaded']) {
@@ -372,15 +372,15 @@ export const GameScreen = class {
         }
         
         /* display coodinate and object data for debugging */
-        context.save();
-        context.fillStyle = '#fff';
-        context.font = '14px sans-serif';
-        context.fillText('Y: ' + String(this.gameData['player'].y), 4, 110);
-        context.fillText('Game X: ' + String(this.gameData['gameXPos']), 4, 130);
-        context.fillText('Player X: ' + String(this.gameData['gameXPos'] + this.gameData['player'].x), 4, 150);
-        context.fillText('Enemy Count: ' + String(this.gameData['enemyList'].size), 4, 170);
-        context.fillText('Item Count: ' + String(this.gameData['itemList'].size), 4, 190);
-        context.restore();       
+        // context.save();
+        // context.fillStyle = '#fff';
+        // context.font = '14px sans-serif';
+        // context.fillText('Y: ' + String(this.gameData['player'].y), 4, 110);
+        // context.fillText('Game X: ' + String(this.gameData['gameXPos']), 4, 130);
+        // context.fillText('Player X: ' + String(this.gameData['gameXPos'] + this.gameData['player'].x), 4, 150);
+        // context.fillText('Enemy Count: ' + String(this.gameData['enemyList'].size), 4, 170);
+        // context.fillText('Item Count: ' + String(this.gameData['itemList'].size), 4, 190);
+        // context.restore();
     }
     mouseDown(e) {
         let xOffset = (e.pageX - window.newGameX) * (CANVAS_BASE_WIDTH / window.newGameWidth),
