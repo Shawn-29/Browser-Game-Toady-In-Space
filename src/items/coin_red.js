@@ -13,7 +13,7 @@ export const CoinR = class extends Item {
         super.update(dt, data);
         if (!this.done && data['player'].collCheck(this, data['gameXPos'])) {
             data['player'].tempScore += SCORE_SHEET[this.constructor.name];
-            data['player'].setHp(-10);
+            data['player'].setHp(-20);
             this.done = true;
         }
     }
