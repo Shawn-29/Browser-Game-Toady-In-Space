@@ -25,13 +25,13 @@ export const DataButton = class extends Button {
         
         switch (data['shotType']) {
             default:
-            case 'Regular': this.img = ShotRegular.imgIcon; break;
-            case 'Lazer': this.img = ShotLazer.imgIcon; break;
-            case 'FireWave': this.img = ShotFireWave.imgIcon; break;
-            case 'Cutter': this.img = ShotCutter.imgIcon; break;
-            case 'Drill': this.img = ShotDrill.imgIcon; break;
-            case 'Ball': this.img = ShotBall.imgIcon; break;
-            case 'Beam': this.img = ShotBeam.imgIcon; break;
+            case 'ShotRegular': this.img = ShotRegular.imgIcon; break;
+            case 'ShotLazer': this.img = ShotLazer.imgIcon; break;
+            case 'ShotFireWave': this.img = ShotFireWave.imgIcon; break;
+            case 'ShotCutter': this.img = ShotCutter.imgIcon; break;
+            case 'ShotDrill': this.img = ShotDrill.imgIcon; break;
+            case 'ShotBall': this.img = ShotBall.imgIcon; break;
+            case 'ShotBeam': this.img = ShotBeam.imgIcon; break;
         }       
     }
     draw(context) {

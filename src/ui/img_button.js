@@ -10,7 +10,6 @@ export const ImgButton = class extends Button {
     }
     draw(context) {
         context.drawImage(this.img, this.left, this.top);
-        //super.draw(context);
     }
     setTapObj(tapObj) {
         if (!this.tapObj) {
