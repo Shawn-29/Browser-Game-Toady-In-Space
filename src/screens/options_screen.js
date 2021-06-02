@@ -89,6 +89,8 @@ export const OptionsScreen = class {
         this.hidden = false;
         this.cameraDoneFn = function() {
 
+            self.removeEventListener('cameradone', this.cameraDoneFn, false);
+
             /* make the game canvas visible again */
             document.getElementById('game-canvas').style.display = 'block';
 
@@ -165,15 +167,14 @@ export const OptionsScreen = class {
                 BarcodeMgr.get().resetBarcode();
             }          
         }.bind(this);
-        self.addEventListener('cameradone', this.cameraDoneFn, false);
     }
     startScan() {
         this.hidden = true;
         document.getElementById('game-canvas').style.display = 'none';
         BarcodeMgr.get().showCamera();
+        self.addEventListener('cameradone', this.cameraDoneFn, false);
     }
     startGame() {
-        self.removeEventListener('cameradone', this.cameraDoneFn, false);
         this.startGameFn();
     }
     hideModal() {
