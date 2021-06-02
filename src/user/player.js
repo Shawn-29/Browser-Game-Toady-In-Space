@@ -31,7 +31,7 @@ export const Player = class extends Rect {
         
         let data = UserMgr.get().getData();
         this.score = this.tempScore = data['score'];
-        this.maxHP = 160;
+        this.maxHP = 200;
         this.shots = null;
         
         /* no shot swap items will appear if a secret shot is unlocked */

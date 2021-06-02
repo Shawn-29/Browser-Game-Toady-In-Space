@@ -25,7 +25,7 @@ export const UserMgr = (() => {
                 activeInd = userInd;
             },
             setHighScore(amt) {
-                let strAmt = String(amt);
+                const strAmt = String(Math.max(Math.min(999999, amt), 0));
                 if (strAmt > highScore)
                     highScore = '0'.repeat(MAX_SCORE_DIGITS - strAmt.length) + strAmt;
             },
