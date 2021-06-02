@@ -66,7 +66,7 @@ export const Player = class extends Rect {
         this.vel = BASE_MOVE_VEL * 0.4;
         this.hp = this.maxHP;
         this.inputCodes = { 75: false, 74: false, 87: false, 83: false, 65: false, 68: false };
-        this.scrollSpeed = 2;
+        this.scrollSpeed = 1.5;
         this.shots.reset();
         this.bomb.reset();
         this.action = 0x0;
@@ -269,7 +269,7 @@ export const Player = class extends Rect {
             if (result & TILE_TYPES['TILE_WALL']) {
                 xM = Math.trunc((rTileOffset) / TILE_SIZE) * TILE_SIZE - this.right - 1 - xOffset;
 
-                // check to see if the player is crushed against the side of the screen and a wall
+                /* check to see if the player is crushed against the side of the screen and a wall */
                 if (this.left <= 0) {
                     this.KOPlayer();
                     return;
@@ -357,7 +357,8 @@ export const Player = class extends Rect {
     KOPlayer() {
         this.blinkTimer.start(.4);
         this.action = ACTION_KO;
-        this.animIndex = 1;        
+        this.animIndex = 1;
+        this.shots.reset();
     }
     win() {
         this.action = (ACTION_WIN | ACTION_PAUSE);
