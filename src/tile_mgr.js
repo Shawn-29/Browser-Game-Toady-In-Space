@@ -87,8 +87,8 @@ export const TileMgr = {
                     for (let col = TM_tileXDrawOffset; col < TM_tileDrawLimit + 1; ++col) {
                         context.drawImage(
                             TM_tileTypes[TM_tiles[row][col]].img,
-                            TILE_SIZE * col - TM_scrollX,
-                            TILE_SIZE * row
+                            TILE_SIZE * col - TM_scrollX | 0,
+                            TILE_SIZE * row | 0
                         );
                     }
                 }
