@@ -379,10 +379,10 @@ export const GameScreen = class {
         }
         
         /* display coodinate and object data for debugging */
-        // context.save();
+        context.save();
         // context.fillStyle = '#fff';
         // context.font = '14px sans-serif';
-        // context.fillText('Y: ' + String(this.gameData['player'].y), 4, 110);
+        // context.fillText('Player Y: ' + String(this.gameData['player'].y), 4, 110);
         // context.fillText('Game X: ' + String(this.gameData['gameXPos']), 4, 130);
         // context.fillText('Player X: ' + String(this.gameData['gameXPos'] + this.gameData['player'].x), 4, 150);
         // context.fillText('Enemy Count: ' + String(this.gameData['enemyList'].size), 4, 170);
