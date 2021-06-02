@@ -18,7 +18,6 @@ export class Boss extends Enemy {
         this.blinkTimer.dur = .2;
         this.animIndex = 0;
         this.defeated = false;
-        // this.hpBar = getImg('Images/Enemies/BossHPBar.png');
         this.hpBar = getImg('./images/enemies/BossHPBar.png');
         
         this.rects = [
@@ -300,12 +299,6 @@ export class Boss extends Enemy {
         }
     }
 }
-// Boss.imgs = [
-//     getImg('Images/Enemies/BargeA.png'),
-//     getImg('Images/Enemies/BargeB.png')
-// ];
-// Boss.imgAnc = getImg('Images/Enemies/Anchor.png');
-// Boss.imgMis = getImg('Images/Enemies/Missile.png');
 Boss.imgs = [
     getImg('./images/enemies/BargeA.png'),
     getImg('./images/enemies/BargeB.png'),

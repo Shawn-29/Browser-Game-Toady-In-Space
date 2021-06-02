@@ -80,10 +80,6 @@ export class Stretcher extends Enemy {
         this.dir ^= 1;
     }
 };
-// Stretcher.imgs = [
-//     getImg('Images/Enemies/StretcherA.png'),
-//     getImg('Images/Enemies/StretcherB.png')
-// ];
 Stretcher.imgs = [
     getImg('./images/enemies/StretcherA.png'),
     getImg('./images/enemies/StretcherB.png')

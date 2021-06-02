@@ -10,7 +10,7 @@ export const Philbert = class extends Enemy {
         super(20, Philbert.imgs[0].width, Philbert.imgs[0].height - 18, x, y);
         this.animIndex = 0;
         this.back = false;
-        this.timer = new Timer(.2, function() {
+        this.timer = new Timer(.15, function() {
             if (!this.back) {
 
                 if (++this.animIndex >= Philbert.imgs.length) {
@@ -49,11 +49,6 @@ export const Philbert = class extends Enemy {
         }
     }
 };
-// Philbert.imgs = [
-//     getImg('Images/Enemies/PhilbertA.png'),
-//     getImg('Images/Enemies/PhilbertB.png'),
-//     getImg('Images/Enemies/PhilbertC.png')
-// ];
 Philbert.imgs = [
     getImg('./images/enemies/PhilbertA.png'),
     getImg('./images/enemies/PhilbertB.png'),

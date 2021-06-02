@@ -50,7 +50,4 @@ Asteroid.imgs = [
     getImg('./images/enemies/AsteroidLg.png'),
     getImg('./images/enemies/AsteroidSm.png'),
     getImg('./images/enemies/AsteroidSmInvuln.png')
-    // getImg('Images/Enemies/AsteroidLg.png'),
-    // getImg('Images/Enemies/AsteroidSm.png'),
-    // getImg('Images/Enemies/AsteroidSmInvuln.png')
 ];

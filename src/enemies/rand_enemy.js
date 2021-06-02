@@ -2,11 +2,11 @@ import {Asteroid} from './asteroid.js';
 import {Domesworth} from './domesworth.js';
 import {Philbert} from './philbert.js';
 
-import {randInt} from '../utility.js';
+import {randDouble, randInt} from '../utilities.js';
 
 export const randEnemy = (x1, x2, y1, y2) => {
-    let xRange = randInt(x1, x2);
-    let yRange = randInt(y1, y2);
+    let xRange = randInt(x1, x2),
+        yRange = randInt(y1, y2);
     switch (randInt(1, 7)) {
         default:
         case 0:

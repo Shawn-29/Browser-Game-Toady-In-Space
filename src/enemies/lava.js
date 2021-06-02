@@ -73,10 +73,6 @@ export const Lava = class {
         }
     }
 };
-// Lava.imgs = [
-//     getImg('Images/Enemies/LavaA.png'), getImg('Images/Enemies/LavaB.png'),
-//     getImg('Images/Enemies/LavaC.png'), getImg('Images/Enemies/LavaB.png')
-// ];
 Lava.imgs = [
     getImg('./images/enemies/LavaA.png'),
     getImg('./images/enemies/LavaB.png'),

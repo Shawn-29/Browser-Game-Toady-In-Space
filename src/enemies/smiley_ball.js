@@ -132,5 +132,4 @@ export const SmileyBall = class extends Enemy {
         }
     }
 };
-// SmileyBall.img = getImg('Images/Enemies/SmileyBall.png');
 SmileyBall.img = getImg('./images/enemies/SmileyBall.png');

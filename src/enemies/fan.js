@@ -25,19 +25,12 @@ export const Fan = class extends Enemy {
                           this.x - xOffset - (Fan.imgs[this.animIndex].width >> 1),
                           this.y - (Fan.imgs[this.animIndex].height >> 1));
         context.save();
-        //context.fillStyle = 'rgba(0, 0, 255, .5)';
-        //context.fillRect(this.left, this.top, this.right - this.left, this.bot - this.top);
         context.fillStyle = 'rgba(255, 0, 0, .5)';
         context.fillRect(this.area.left - xOffset, this.area.top, this.area.right - this.area.left, this.area.bot - this.area.top);
         context.restore();
     }
     collCheck(rect, xOffset = 0) { return false; }
 };
-// Fan.imgs = [
-//     getImg('Images/Enemies/FanA.png'),
-//     getImg('Images/Enemies/FanB.png'),
-//     getImg('Images/Enemies/FanC.png')
-// ];
 Fan.imgs = [
     getImg('./images/enemies/FanA.png'),
     getImg('./images/enemies/FanB.png'),

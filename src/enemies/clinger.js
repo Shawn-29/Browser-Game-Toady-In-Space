@@ -47,7 +47,5 @@ export class Clinger extends Enemy {
         }
     }
 }
-// Clinger.img = getImg('Images/Enemies/Clinger.png');
-// Clinger.imgShot = getImg('Images/Enemies/ClingerShot.png');
 Clinger.img = getImg('./images/enemies/Clinger.png');
 Clinger.imgShot = getImg('./images/enemies/ClingerShot.png');

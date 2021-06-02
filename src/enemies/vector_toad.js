@@ -83,8 +83,6 @@ export class VectorToad extends Enemy {
         }
     }
 };
-// VectorToad.img = getImg('Images/Enemies/VectorToad.png');
-// VectorToad.imgShot = getImg('Images/Enemies/VectorToadShot.png');
 VectorToad.img = getImg('./images/enemies/VectorToad.png');
 VectorToad.imgShot = getImg('./images/enemies/VectorToadShot.png');
 VectorToad.vel = BASE_MOVE_VEL * 0.4;

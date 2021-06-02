@@ -74,7 +74,5 @@ export const Domesworth = class extends Enemy {
         }
     }
 };
-// Domesworth.img = getImg('Images/Enemies/Domesworth.png');
-// Domesworth.imgShot = getImg('Images/Enemies/DomesworthShot.png');
 Domesworth.img = getImg('./images/enemies/Domesworth.png');
 Domesworth.imgShot = getImg('./images/enemies/DomesworthShot.png');
