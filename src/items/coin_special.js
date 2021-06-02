@@ -13,7 +13,7 @@ export const CoinS = class extends Item {
         super.update(dt, data);
         if (!this.done && data['player'].collCheck(this, data['gameXPos'])) {
             data['player'].tempScore += SCORE_SHEET[this.constructor.name];
-            data['player'].invulnerable();
+            data['player'].makeInvulnerable();
             this.done = true;
         }
     }
@@ -23,12 +23,6 @@ export const CoinS = class extends Item {
                          this.y - CoinS.imgs[CoinG.animIndex].height * 0.5);        
     }
 };
-// CoinS.imgs = [
-//     getImg('Images/Items/CoinS1.png'),
-//     getImg('Images/Items/CoinS2.png'),
-//     getImg('Images/Items/CoinS3.png'),
-//     getImg('Images/Items/CoinS4.png')
-// ];
 CoinS.imgs = [
     getImg('./images/items/CoinS1.png'),
     getImg('./images/items/CoinS2.png'),

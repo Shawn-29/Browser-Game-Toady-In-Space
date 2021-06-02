@@ -22,12 +22,6 @@ export const CoinY = class extends Item {
                          this.y - CoinY.imgs[CoinG.animIndex].height * 0.5);        
     }
 };
-// CoinY.imgs = [
-//     getImg('Images/Items/CoinY1.png'),
-//     getImg('Images/Items/CoinY2.png'),
-//     getImg('Images/Items/CoinY3.png'),
-//     getImg('Images/Items/CoinY4.png')
-// ];
 CoinY.imgs = [
     getImg('./images/items/CoinY1.png'),
     getImg('./images/items/CoinY2.png'),

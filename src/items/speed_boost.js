@@ -25,5 +25,4 @@ export const SpeedBoost = class extends Item {
         }
     }
 };
-// SpeedBoost.img = getImg('Images/Items/SpeedBoost.png');
 SpeedBoost.img = getImg('./images/items/SpeedBoost.png');

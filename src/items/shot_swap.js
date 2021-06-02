@@ -30,12 +30,6 @@ export const ShotSwap = class extends Item {
         }
     }
 };
-// ShotSwap.imgs = [
-//     getImg('Images/Items/ShotSwap1.png'),
-//     getImg('Images/Items/ShotSwap2.png'),
-//     getImg('Images/Items/ShotSwap3.png'),
-//     getImg('Images/Items/ShotSwap4.png')
-// ];
 ShotSwap.imgs = [
     getImg('./images/items/ShotSwap1.png'),
     getImg('./images/items/ShotSwap2.png'),

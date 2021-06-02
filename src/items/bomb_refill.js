@@ -25,5 +25,4 @@ export const BombRefill = class extends Item {
         }
     }
 };
-// BombRefill.img = getImg('Images/Items/BombRefill.png');
 BombRefill.img = getImg('./images/items/BombRefill.png');

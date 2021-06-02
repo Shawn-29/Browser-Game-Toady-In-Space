@@ -1,8 +1,10 @@
 import {CoinG} from './coin_green.js';
 
+import {randInt} from '../utilities.js';
+
 export const randItem = (x1, x2, y1, y2) => {
-    let xRange = randInt(x1, x2);
-    let yRange = randInt(y1, y2);
+    let xRange = randInt(x1, x2),
+        yRange = randInt(y1, y2);
     switch (randInt(1, 35)) {
         case 0:
         case 1:
@@ -20,12 +22,12 @@ export const randItem = (x1, x2, y1, y2) => {
                     ];
         case 4:
             return [{ t: 'CoinR', x: xRange, y: yRange },
-                    { t: 'CoinR', x: xRange + CoinR.imgs[0].width + 10, y: yRange },
+                    { t: 'CoinR', x: xRange + CoinG.imgs[0].width + 10, y: yRange },
                     ];
         case 5:
             yRange = randInt(y1, y2 - CoinG.imgs[0].height);
             return [{ t: 'CoinR', x: xRange, y: yRange },
-                    { t: 'CoinR', x: xRange, y: yRange + CoinR.imgs[0].height + 10 }
+                    { t: 'CoinR', x: xRange, y: yRange + CoinG.imgs[0].height + 10 }
                     ];
         case 6:
             return { t: 'CoinY', x: xRange, y: yRange };
