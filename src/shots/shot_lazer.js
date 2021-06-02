@@ -30,7 +30,6 @@ export const ShotLazer = class extends Shot {
                     }
                     else {
                         for (let e of data['enemyList']) {
-                            //if (this.lazerSm[0].collCheck(e, xOffset) && e.setHp(ShotLazer.power >> 1, data)) {
                             if (e.collCheck(this.lazerSm[0], xOffset) && e.setHp(ShotLazer.power >> 1, data)) {
                                 this.lazerSm[0].fired = false;
                                 break;
@@ -52,7 +51,6 @@ export const ShotLazer = class extends Shot {
                     }
                     else {
                         for (let e of data['enemyList']) {
-                            //if (this.lazerSm[1].collCheck(e, xOffset) && e.setHp(ShotLazer.power >> 1, data)) {
                             if (e.collCheck(this.lazerSm[1], xOffset) && e.setHp(ShotLazer.power >> 1, data)) {
                                 this.lazerSm[1].fired = false;
                                 break;
@@ -81,7 +79,6 @@ export const ShotLazer = class extends Shot {
                 }
                 else {
                     for (let e of data['enemyList']) {
-                        //if (this.collCheck(e, xOffset) && e.setHp(ShotLazer.power, data)) {
                         if (e.collCheck(this, xOffset) && e.setHp(ShotLazer.power, data)) {
                             this.splitLazer();
                             break;
@@ -106,10 +103,11 @@ export const ShotLazer = class extends Shot {
                 }
             }
             else {
-                context.drawImage(ShotLazer.imgs[0],
-                                  this.x - ShotLazer.imgs[0].width * 0.5,
-                                  this.y - ShotLazer.imgs[0].height * 0.5);
-                //super.draw(context);
+                context.drawImage(
+                    ShotLazer.imgs[0],
+                    this.x - ShotLazer.imgs[0].width * 0.5,
+                    this.y - ShotLazer.imgs[0].height * 0.5
+                );
             }
         }
     }

@@ -60,10 +60,11 @@ export const ShotBeam = class extends Shot {
                 if (this.accum & 0x2)
                     context.drawImage(ShotBeam.imgs[2], this.x - (ShotBeam.imgs[2].width >> 1), this.y - (ShotBeam.imgs[2].height >> 1));                
             }
-            /*context.save();
-            context.fillStyle = 'rgba(255,0,0,.6)';
-            context.fillRect(this.left, this.top, this.right - this.left, this.bot - this.top);
-            context.restore();*/
+            /* debug - draw beam collision bounds */
+            // context.save();
+            // context.fillStyle = 'rgba(255,0,0,.6)';
+            // context.fillRect(this.left, this.top, this.right - this.left, this.bot - this.top);
+            // context.restore();
         }
     }
     fire(x, y) {
