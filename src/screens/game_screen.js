@@ -1,4 +1,6 @@
 import {getImg, randBool, randInt} from '../utilities.js';
+import {randAsteroid, randEnemy} from '../enemies/rand_enemy.js';
+import {randItem} from '../items/random_item.js';
 
 import {ExpMgr} from '../explosion_mgr.js';
 import {Player, ACTION_KO, ACTION_WIN} from '../user/player.js';
@@ -15,7 +17,9 @@ import {
     EVENT_CREDITS_START,
     EVENT_GAME_DONE,
     MAX_LEVEL,
-    LEVEL_HEIGHT
+    LEVEL_HEIGHT,
+    RAND_LEVEL_CODE_EURTH,
+    RAND_LEVEL_CODE_ASTEROIDS
 } from '../gameplay_constants.js';
 
 /* import UI */
@@ -87,7 +91,7 @@ const updateItemTimers = (dt) => {
 };
 
 export const GameScreen = class {
-    constructor(gameCanvas) {
+    constructor(gameCanvas, secretData) {
 
         this.gameData = {
             'player': new Player(this.resetLevel.bind(this),
@@ -100,8 +104,8 @@ export const GameScreen = class {
             'itemFileData': [],
             'levelName': '',
             'gameXPos': 0,
-            'scrollAccum': 0,
             'loaded': false,
+            secretData
         };
         
         this.modal = new Modal(
@@ -160,9 +164,9 @@ export const GameScreen = class {
             )
         ];
         
-        this.s = getImg('./images/ui/StatusBar.png');
+        this.statusBar = getImg('./images/ui/StatusBar.png');
         
-        this.sceneTimer = new Timer(.01, function() {
+        this.sceneTimer = new Timer(1.01, function() {
             this.draw = this.drawGame;
             this.levelDone = false;
         }.bind(this), false);
@@ -182,9 +186,11 @@ export const GameScreen = class {
         self.addEventListener('keydown', this.keyDown.bind(this));
         self.addEventListener('keyup', this.keyUp.bind(this));
         
-        /* because bind creates a new function object, these functions
-        must be stored so that they can be removed later if the user
-        exits the game screen */
+        /*
+            because bind creates a new function object, these functions
+            must be stored so that they can be removed later if the user
+            exits the game screen
+        */
         this.touchStartFn = this.touchStart.bind(this);
         this.touchEndFn = this.touchEnd.bind(this);
         this.touchMoveFn = this.touchMove.bind(this);
@@ -233,20 +239,22 @@ export const GameScreen = class {
         
         if (!(this.gameData['player'].action & (ACTION_KO | ACTION_WIN))) {
         
-            if ((this.gameData['scrollAccum']++) & 0x1 && !TileMgr.get().isDone()) {
-
-                this.gameData['gameXPos'] += this.gameData['player'].scrollSpeed;
-                this.gameData['scrollAccum'] = 0;
+            if (!TileMgr.get().isDone()) {
+                /* update the game's x position */
+                this.gameData['gameXPos'] = TileMgr.get().getXPos(
+                    this.gameData['gameXPos'],
+                    this.gameData['player'].scrollSpeed
+                );
             }
 
             /* activate objects within traversed game screens */
             let offset = Math.min(
-                    Math.trunc(
-                        (this.gameData['gameRect'].right + this.gameData['gameXPos']) /
+                Math.trunc(
+                    (this.gameData['gameRect'].right + this.gameData['gameXPos']) /
                         (CANVAS_BASE_WIDTH * 0.25)
-                    ),
-                    this.gameData['screens'].length - 1
-                );
+                ),
+                this.gameData['screens'].length - 1
+            );
             this.gameData['screens'][offset].activate(this.gameData['enemyList'],
                                                      this.gameData['itemList']);
 
@@ -342,7 +350,7 @@ export const GameScreen = class {
 
             this.gameData['player'].draw(context, this.gameData['gameXPos']);
             
-            context.drawImage(this.s, 0, CANVAS_BASE_HEIGHT - 40);
+            context.drawImage(this.statusBar, 0, CANVAS_BASE_HEIGHT - 40);
             
             context.save();
             context.globalAlpha = 0.8;
@@ -363,24 +371,24 @@ export const GameScreen = class {
             context.fillRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
         }
         
-        //return;
-        context.save(); // DEBUG
+        /* display coodinate and object data for debugging */
+        context.save();
         context.fillStyle = '#fff';
-        context.font = '24px sans';
-        context.fillText(String(this.gameData['player'].y), 4, 120);
-        context.fillText(String(this.gameData['gameXPos'] + this.gameData['player'].x), 4, 160);
-        context.fillText(String(this.gameData['enemyList'].size), 4, 200);
-        context.fillText(String(this.gameData['itemList'].size), 4, 240);
+        context.font = '14px sans-serif';
+        context.fillText('Y: ' + String(this.gameData['player'].y), 4, 110);
+        context.fillText('Game X: ' + String(this.gameData['gameXPos']), 4, 130);
+        context.fillText('Player X: ' + String(this.gameData['gameXPos'] + this.gameData['player'].x), 4, 150);
+        context.fillText('Enemy Count: ' + String(this.gameData['enemyList'].size), 4, 170);
+        context.fillText('Item Count: ' + String(this.gameData['itemList'].size), 4, 190);
         context.restore();       
     }
     mouseDown(e) {
-        let xOffset = (e.pageX - window.newGameX) * (CANVAS_BASE_WIDTH / window.newGameWidth);
-        let yOffset = (e.pageY - window.newGameY) * (CANVAS_BASE_HEIGHT / window.newGameHeight);
+        let xOffset = (e.pageX - window.newGameX) * (CANVAS_BASE_WIDTH / window.newGameWidth),
+            yOffset = (e.pageY - window.newGameY) * (CANVAS_BASE_HEIGHT / window.newGameHeight);
         
         if (this.modal.hidden) {
             for (let btn of this.btns) {
                 btn.checkPoint(xOffset, yOffset);
-                    //console.log(`Button clicked! left ${btn.left} top ${btn.top} right ${btn.right} bot ${btn.bot}`);
             }            
         }
         else {
@@ -444,7 +452,6 @@ export const GameScreen = class {
                 }
                 break;
             }
-            //console.log(btn);
         }
     }
     keyDown(e) {
@@ -454,39 +461,55 @@ export const GameScreen = class {
         this.gameData['player'].inputUp(e.keyCode);
     }
     loadLevel() {
-        //this.loadRandom2();
-        //return;
+
+        if (this.gameData['secretData'].randomLevelCode > 0) {
+
+            this.gameData['player'].setShotType(this.gameData['secretData'].secretShot);
+
+            switch (this.gameData['secretData'].randomLevelCode) {
+                case RAND_LEVEL_CODE_EURTH:
+                    this.loadRandomLevelEurth();
+                    this.gameData['isSecretLevel'] = true;
+                    return;
+                case RAND_LEVEL_CODE_ASTEROIDS:
+                    this.loadRandomLevelAsteroids();
+                    this.gameData['isSecretLevel'] = true;
+                    return;
+            }
+        }
+
+        const gameScreen = this;
         
+        // let levelStr = "./level_data/F2.json";
+        // let levelStr = "./level_data/Level7.json";
+        const levelStr = "./level_data/Level" + UserMgr.get().getData().level + ".json";
+
         let jsonData = null;
         
-        let gameScreen = this;
-        
-        //let levelStr = "./level_data/F2.json";
-        // let levelStr = "./level_data/Level7.json";
-        let levelStr = "./level_data/Level" + UserMgr.get().getData().level + ".json";
-        
         fetch(levelStr)
-        .then(function(response) {
+        .then((response) => {
             if (!response.ok) {
                 throw Error(response);
             }
             return response.json();
         })
-        .then(function(data) {
+        .then((data) => {
                 jsonData = data;
                    
+                TileMgr.get().reset();
                 TileMgr.get().setTiles(jsonData['tiles']);
 
                 if (TileMgr.get().tilesLoaded()) {
 
-                   let levelWidth = TILE_SIZE * jsonData['tiles'][0].length;
-                   let numScreens = Math.ceil(levelWidth / (CANVAS_BASE_WIDTH * 0.25));
-                   for (let i = 0; i < numScreens; ++i) {
-                       gameScreen.gameData['screens'].push(
-                           new Screen(
-                               CANVAS_BASE_WIDTH * 0.25,
-                               CANVAS_BASE_HEIGHT,
-                               CANVAS_BASE_WIDTH * .125 + CANVAS_BASE_WIDTH * 0.25 * i,
+                    let levelWidth = TILE_SIZE * jsonData['tiles'][0].length,
+                        numScreens = Math.ceil(levelWidth / (CANVAS_BASE_WIDTH * 0.25));
+
+                    for (let i = 0; i < numScreens; ++i) {
+                        gameScreen.gameData['screens'].push(
+                            new Screen(
+                                CANVAS_BASE_WIDTH * 0.25,
+                                CANVAS_BASE_HEIGHT,
+                                CANVAS_BASE_WIDTH * .125 + CANVAS_BASE_WIDTH * 0.25 * i,
                                 0
                             )
                         );
@@ -499,56 +522,59 @@ export const GameScreen = class {
                     
                     return './tile_data/' + jsonData['tileDataFile'];
                 }
-        }).then(function(response) {
+        }).then((response) => {
            fetch(response)
-           .then(function(response) { return response.json(); })
-           .then(function(data) {
-               jsonData = data; //JSON.parse(response);
-               console.log('data', jsonData);
+           .then((response) => { return response.json(); })
+           .then((data) => {
+               jsonData = data;
                TileMgr.get().setTileTypes(jsonData['tileTypes']);
            })
-           .then(function() {
+           .then(() => {
                gameScreen.placeEnemies();
                gameScreen.gameData['loaded'] = true;
                gameScreen.sceneTimer.start();
            });
         })
-        .catch(error => {
+        .catch((error) => {
             console.log('Error:', error);
         });
     }
     async loadSafetyZone() {
-        return fetch(`../../level_data/FSafety.json`)
+        return await fetch(`./level_data/FSafety.json`)
         .then(function(response) {
             return response.json();
         });        
     }
     async loadEndZone() {
-        return fetch('../../level_data/FEnd.json')
+        return await fetch('./level_data/FEnd.json')
         .then(function(response) {
             return response.json();
         });
     }
     async loadFormation() {
-        return fetch(`../../level_data/F${randInt(1, 10)}.json`)
+        return await fetch(`./level_data/F${randInt(1, 10)}.json`)
         .then(function(response) {
             return response.json();
         });
     }
-    loadRandom() {
-        let gameScreen = this;
-        let enemyObj = null;
-        let itemObj = null;
-        let xOffset = -1;
-        Promise.all([
+    loadRandomLevelEurth() {
+        let gameScreen = this,
+            enemyObj = null,
+            itemObj = null,
+            xOffset = -1;
+
+        Promise.all(
+            [
                 gameScreen.loadSafetyZone(),
-                ...Array.from(Array(1), () => this.loadFormation()),
+                ...Array.from({length: randInt(8, 10)}, () => this.loadFormation()),
                 gameScreen.loadEndZone()
-            ])
-            .then(function(values) {
-            console.log('values', values);
-            let tiles = Array.from({length: 8}, () => []);
-            let safetyZoneWidth = TILE_SIZE * values[0]['tiles'][0].length;
+            ]
+        )
+        .then((values) => {
+
+            const tiles = Array.from({length: 8}, () => []),
+                safetyZoneWidth = TILE_SIZE * values[0]['tiles'][0].length;
+
             for (let i = 0, len = values.length; i < len; ++i) {
                 for (let z = 0, y = values[i]['tiles'].length; z < y; ++z) {
                     tiles[z].push(...values[i]['tiles'][z]);
@@ -583,19 +609,23 @@ export const GameScreen = class {
                     }
                 }
             }
-            //console.log('itemFileData', gameScreen.gameData['itemFileData']);
             
             TileMgr.get().setTiles(tiles);
             
             if (TileMgr.get().tilesLoaded()) {
 
-               let levelWidth = TILE_SIZE * tiles[0].length;
-               let numScreens = Math.ceil(levelWidth / (CANVAS_BASE_WIDTH * 0.25));
-               for (let i = 0; i < numScreens; ++i) {
-                   gameScreen.gameData['screens'].push(new Screen(CANVAS_BASE_WIDTH * 0.25,
-                                                                  CANVAS_BASE_HEIGHT,
-                                                      CANVAS_BASE_WIDTH * .125 + CANVAS_BASE_WIDTH * 0.25 * i,
-                                                      0));
+                let levelWidth = TILE_SIZE * tiles[0].length,
+                    numScreens = Math.ceil(levelWidth / (CANVAS_BASE_WIDTH * 0.25));
+
+                for (let i = 0; i < numScreens; ++i) {
+                    gameScreen.gameData['screens'].push(
+                        new Screen(
+                            CANVAS_BASE_WIDTH * 0.25,
+                            CANVAS_BASE_HEIGHT,
+                            CANVAS_BASE_WIDTH * .125 + CANVAS_BASE_WIDTH * 0.25 * i,
+                            0
+                        )
+                    );
                }
                 
                 gameScreen.gameData['levelName'] = '???????';
@@ -604,10 +634,10 @@ export const GameScreen = class {
                 return './tile_data/' + 'eurth_tiles.json';
             }
         })
-        .then(function(response) {
+        .then((response) => {
             fetch(response)
-            .then(function(response) { return response.json(); })
-            .then(function(data) {
+            .then(response => response.json())
+            .then((data) => {
                 TileMgr.get().setTileTypes(data['tileTypes']);
                 gameScreen.placeEnemies();
                 gameScreen.gameData['loaded'] = true;
@@ -615,21 +645,20 @@ export const GameScreen = class {
             });
         });
     }
-    loadRandom2() {
+    loadRandomLevelAsteroids() {
+        const MAX_COLS = 128,
+              MIN_COLS = 96,
+              MAX_E_FREQ = 8,
+              MIN_E_FREQ = 4,
+              /* calculate ratio between 1 column and 1 enemy frequency */
+              STEP = (MAX_E_FREQ - MIN_E_FREQ) / (MAX_COLS - MIN_COLS);
+
         let tiles = Array.from({length: 8}, () => []),
             lastTile = -1,
             curTile = -1,
             lastSTile = -1,
             sAccum = 0,
-            numCols = -1,
-            eFrequency = -1;
-        const MAX_COLS = 128,
-              MIN_COLS = 96,
-              MAX_E_FREQ = 8,
-              MIN_E_FREQ = 4,
-              // calculate ratio between 1 column and 1 enemy frequency
-              STEP = (MAX_E_FREQ - MIN_E_FREQ) / (MAX_COLS - MIN_COLS);
-        numCols = randInt(MIN_COLS, MAX_COLS);
+            numCols = randInt(MIN_COLS, MAX_COLS);
         /*
             clamp the enemy placement frequency between 8 and 4 depending
             on level size; smaller number denotes more enemies:
@@ -637,8 +666,7 @@ export const GameScreen = class {
             level size:      128 120 112 104 96
             enemy frequency: 8   7   6   5   4
         */
-        //eFrequency = MAX_E_FREQ - Math.round((MAX_COLS - numCols) / MAX_E_FREQ);
-        eFrequency = MAX_E_FREQ - Math.round((MAX_COLS - numCols) * STEP);
+        let eFrequency = MAX_E_FREQ - Math.round((MAX_COLS - numCols) * STEP);
 
         /* generate random tiles */
         for (let col = 0; col < numCols; ++col) {
@@ -686,12 +714,13 @@ export const GameScreen = class {
                 );
             }
             
-            // fill the level with asteroids
-            let xPoint = TILE_SIZE * 16, // give Toady a safe starting zone
+            let xPoint = TILE_SIZE * 16, /* give Toady a safe starting zone */
                 enemyObj = null,
                 itemObj = null,
                 eAccum = 0,
-                stopWidth = levelWidth - TILE_SIZE * 12; // place no objects at the ending zone
+                stopWidth = levelWidth - TILE_SIZE * 12; /* place no objects at the ending zone */
+
+            /* fill the level with asteroids */
             while (xPoint < stopWidth) {
                 enemyObj = randAsteroid(xPoint, xPoint, 0, LEVEL_HEIGHT);
                 if (Array.isArray(enemyObj)) {
@@ -723,7 +752,7 @@ export const GameScreen = class {
 
             this.gameData['levelName'] = '???????';
             this.draw = this.drawSplash;
-            let gameScreen = this;
+            const gameScreen = this;
             fetch('./tile_data/space_tiles.json')
             .then(function(response) { return response.json(); })
             .then(function(data) {
@@ -738,8 +767,9 @@ export const GameScreen = class {
         let screenInd = -1;
         if (this.gameData['enemyFileData']) {
             for (let e of this.gameData['enemyFileData']) {
-                /* enemies are placed in the last screen by default */
+                /* enemies are placed in the last screen initially */
                 screenInd = this.gameData['screens'].length - 1;
+                
                 for (let i = 0, len = this.gameData['screens'].length; i < len; ++i) {
                     if (e.x >= this.gameData['screens'][i].left &&
                        e.x <= this.gameData['screens'][i].right) {
@@ -780,9 +810,9 @@ export const GameScreen = class {
         
         /* activate the first screens within the level's starting view */
         let offset = Math.min(
-                Math.trunc((this.gameData['gameRect'].right) / (CANVAS_BASE_WIDTH * 0.25)),
-                this.gameData['screens'].length - 1
-            );
+            Math.trunc((this.gameData['gameRect'].right) / (CANVAS_BASE_WIDTH * 0.25)),
+            this.gameData['screens'].length - 1
+        );
         for (; offset >= 0; --offset) {
             this.gameData['screens'][offset].activate(
                 this.gameData['enemyList'],
@@ -792,7 +822,6 @@ export const GameScreen = class {
     }
     resetLevel() {
         this.gameData['gameXPos'] = 0;
-        this.gameData['scrollAccum'] = 0;
         this.gameData['player'].reset();
         this.gameData['gameRect'].setPos(CANVAS_BASE_WIDTH * 0.5 - 1, 0);
         this.gameData['enemyList'].clear();
@@ -818,7 +847,6 @@ export const GameScreen = class {
         this.gameData['enemyFileData'].length = 0;
         this.gameData['itemFileData'].length = 0;
         this.gameData['gameXPos'] = 0;
-        this.gameData['scrollAccum'] = 0;
         this.gameData['loaded'] = false;
         
         TileMgr.get().reset();
@@ -829,6 +857,12 @@ export const GameScreen = class {
         this.scoreBonus = this.gameData['player'].hp * 60;
         
         this.gameData['player'].score += this.scoreBonus;
+
+        /* do not store the player's score if the level completed
+            was a secret level */
+        if (this.gameData['isSecretLevel']) {
+            return;
+        }
         
         UserMgr.get().getData().score = this.gameData['player'].score;
         UserMgr.get().getData().shotType = this.gameData['player'].shotType;
@@ -840,13 +874,24 @@ export const GameScreen = class {
         }       
     }
     endLevel() {
-        UserMgr.get().getData().level = Math.min(UserMgr.get().getData().level + 1, MAX_LEVEL);
+
         this.awardPoints();
         this.levelDone = true;
-        let tempFn = this.sceneTimer.callback;
+
+        const tempFn = this.sceneTimer.callback;
+        
         this.sceneTimer.callback = function() {
-            this.resetGame();
-            this.sceneTimer.callback = tempFn;
+
+            if (!this.gameData['isSecretLevel']) {
+                UserMgr.get().getData().level = Math.min(UserMgr.get().getData().level + 1, MAX_LEVEL);
+                this.sceneTimer.callback = tempFn;
+                this.resetGame();
+            }
+            else {
+                this.gameData['loaded'] = false;
+                this.exitGameScreen();
+                self.dispatchEvent(EVENT_GAME_DONE);
+            }
         }.bind(this);
         this.sceneTimer.start();
     }

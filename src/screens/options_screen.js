@@ -1,18 +1,23 @@
+import {BarcodeMgr} from '../barcode_scanner/video.js';
 import {DataButton} from '../ui/data_button.js';
 import {ImgButton} from '../ui/img_button.js';
 import {Modal} from '../ui/modal.js';
 import {UserMgr} from '../user/user_mgr.js';
 
-import {getImg} from '../utilities.js';
+import {getImg, getRandChoice} from '../utilities.js';
 
-import {CANVAS_BASE_HEIGHT, CANVAS_BASE_WIDTH, MAX_PATHS} from '../gameplay_constants.js';
-import { BarcodeMgr } from '../barcode_scanner/video.js';
-
-// import {barcode_result} from '../barcode_scanner/video.js';
+import {
+    CANVAS_BASE_HEIGHT,
+    CANVAS_BASE_WIDTH,
+    MAX_PATHS,
+    RAND_LEVEL_CODE_ASTEROIDS,
+    RAND_LEVEL_CODE_EURTH
+} from '../gameplay_constants.js';
 
 export const OptionsScreen = class {
     constructor(startGameFn) {
         this.startGameFn = startGameFn;
+        this.reward = {};
         if (localStorage) {
             /* create default localStorage data if it doesn't exist */
             if (!localStorage.userData) {
@@ -56,7 +61,13 @@ export const OptionsScreen = class {
             '',
             new ImgButton(
                 './images/ui/AwesomeBtn.png',
-                function() { this.secretModal.hidden = true; }.bind(this),
+                function() {
+                    this.secretModal.hidden = true;
+
+                    if (this.reward.randomLevelCode !== '') {
+                        this.startGameFn();
+                    }
+                }.bind(this),
                 280, 66,
                 CANVAS_BASE_WIDTH >> 1, 170
             )
@@ -87,29 +98,71 @@ export const OptionsScreen = class {
             const barcode_result = BarcodeMgr.get().getBarcode();
 
             /* check if the barcode was read */
-            if (barcode_result.length) {
-                /* find the middle digit of the barcode string and
-                    grant secret shot type based on it */
-                if (parseInt(barcode_result[barcode_result.length >> 1]) < 5) {
-                    UserMgr.get().getData().shotType = 'Drill';
-                    this.secretModal.msg = 'Drill Obtained!';
-                }
-                else {
-                    UserMgr.get().getData().shotType = 'Ball';
-                    this.secretModal.msg = 'Bouncy Ball obtained!';
-                }
-                
-                this.secretModal.hidden = false;
-                
-                this.activeBtn.setData(UserMgr.get().getData());
+            if (barcode_result.length > 0) {
 
-                /* write the awarded shot type to the current path */
-                localStorage.userData = UserMgr.get().getStringJSON();
-                
+                const midIndex = barcode_result.length >>> 1;
+
+                let levelAwarded = false;
+
+                this.reward = {secretShot: '', randomLevelCode: '', msg: ''};
+
+                /* award a randomly generated level based on the digit to the left
+                    or right of the middle digit */
+                if (barcode_result[midIndex - 1] < 3) {
+                    this.reward.randomLevelCode = RAND_LEVEL_CODE_EURTH;
+                    this.reward.msg = 'Warp Zone Activated!';
+                    levelAwarded = true;
+                }
+                else if (barcode_result[midIndex + 1] > 6) {
+                    this.reward.randomLevelCode = RAND_LEVEL_CODE_ASTEROIDS;
+                    this.reward.msg = 'Warp Zone Activated!';
+                    levelAwarded = true;
+                }
+
+                if (levelAwarded) {
+                    /* get a random shot type to be used in the randomly-generated level */
+                    this.reward.secretShot = getRandChoice(
+                        'ShotRegular', 'ShotLazer', 'ShotFireWave', 'ShotCutter',
+                        ['ShotDrill', 10], ['ShotBall', 10], ['ShotBeam', 10]
+                    );
+                }
+                /* if no randomly-generated level was awarded, always award the
+                    player with a secret shot */
+                else {
+                    /* get the middle digit of the barcode string and
+                        grant a secret shot type based on it */
+                    const middleDigit = barcode_result[midIndex];
+
+                    if (middleDigit <= 3) {
+                        this.reward.secretShot = 'ShotDrill';
+                        this.reward.msg = 'Drill Obtained!';
+                    }
+                    else if (middleDigit <= 6) {
+                        this.reward.secretShot = 'ShotBall';
+                        this.reward.msg = 'Bouncy Ball Obtained!';
+                    }
+                    else {
+                        this.reward.secretShot = 'ShotBeam';
+                        this.reward.msg = 'Mega Beam Obtained!';
+                    }
+
+                    /* store the secret shot type so the user can begin a new game path with it */
+                    UserMgr.get().getData().shotType = this.reward.secretShot;
+
+                    this.activeBtn.setData(UserMgr.get().getData());
+
+                    /* write the awarded shot type to the current path */
+                    localStorage.userData = UserMgr.get().getStringJSON();
+                }
+
+                this.secretModal.msg = this.reward.msg;
+
+                /* display the reward to the player */
+                this.secretModal.hidden = false;
+               
                 /* reset the barcode; user must scan a barcode again to
-                    be awarded with another secret shot type */
+                    be awarded with another secret reward */
                 BarcodeMgr.get().resetBarcode();
-                // barcode_result = '';
             }          
         }.bind(this);
         self.addEventListener('cameradone', this.cameraDoneFn, false);
@@ -118,7 +171,6 @@ export const OptionsScreen = class {
         this.hidden = true;
         document.getElementById('game-canvas').style.display = 'none';
         BarcodeMgr.get().showCamera();
-        // document.getElementById('camera-area').style.display = 'block';
     }
     startGame() {
         self.removeEventListener('cameradone', this.cameraDoneFn, false);
@@ -152,8 +204,8 @@ export const OptionsScreen = class {
         if (this.hidden)
             return;
         
-        let xOffset = (e.pageX - window.newGameX) * (CANVAS_BASE_WIDTH / window.newGameWidth);
-        let yOffset = (e.pageY - window.newGameY) * (CANVAS_BASE_HEIGHT / window.newGameHeight);
+        let xOffset = (e.pageX - window.newGameX) * (CANVAS_BASE_WIDTH / window.newGameWidth),
+            yOffset = (e.pageY - window.newGameY) * (CANVAS_BASE_HEIGHT / window.newGameHeight);
 
         if (this.secretModal.hidden) {
             if (this.modal.hidden) {
@@ -172,14 +224,15 @@ export const OptionsScreen = class {
         }
     }
     setActiveBtn(btn) {
-        if (this.activeBtn)
+        if (this.activeBtn) {
             this.activeBtn.fillClr = '#264a2f';
+        }
         this.activeBtn = btn;
         this.activeBtn.fillClr = '#262f8a';
         UserMgr.get().setActiveUser(this.btns.indexOf(this.activeBtn));
     }
     clearGame() {
-        let activeInd = UserMgr.get().getActiveInd();
+        const activeInd = UserMgr.get().getActiveInd();
         
         UserMgr.get().clearData(activeInd);
         
