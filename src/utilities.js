@@ -61,8 +61,10 @@ export const getRandChoice = (...choices) => {
 };
 
 export const getTimestamp = () => {
-    return window?.performance?.now?.() ?? new Date().getTime();
-    // return window.performance && window.performance.now ? window.performance.now() : new Date().getTime();
+    return window.performance && window.performance.now ? window.performance.now() : new Date().getTime();
+
+    /* shorter syntax than above but lower browser support */
+    // return window?.performance?.now?.() ?? new Date().getTime();
 };
 
 export const randBool = () => Math.random() >= .5;
