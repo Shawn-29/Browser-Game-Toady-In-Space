@@ -31,14 +31,16 @@ export const Player = class extends Rect {
         
         let data = UserMgr.get().getData();
         this.score = this.tempScore = data['score'];
-        this.maxHP = 1500;
+        this.maxHP = 160;
         this.shots = null;
         
         /* no shot swap items will appear if a secret shot is unlocked */
         this.hasSecret = false;
 
         this.setShotType(UserMgr.get().getData(UserMgr.get().getActiveInd()).shotType);
-        // this.setShotType('Beam');
+
+        /* debug - uncomment the line below to give the player a certain shot type to test */
+        // this.setShotType('ShotBeam');
         
         this.bomb = new Bomb();
         
@@ -58,18 +60,19 @@ export const Player = class extends Rect {
     reset() {
         this.setPos(100, 160);
         this.animIndex = 0;
+        this.blinkAccum = 1;
         this.xMove = 0;
         this.yMove = 0;
         this.vel = BASE_MOVE_VEL * 0.4;
         this.hp = this.maxHP;
         this.inputCodes = { 75: false, 74: false, 87: false, 83: false, 65: false, 68: false };
-        this.scrollSpeed = 4;
+        this.scrollSpeed = 2;
         this.shots.reset();
         this.bomb.reset();
         this.action = 0x0;
         this.tempScore = this.score;
     }
-    invulnerable() {
+    makeInvulnerable() {
         this.blinkAccum = 1;
         this.action |= ACTION_INV;
         this.blinkTimer.start(6);
@@ -148,7 +151,7 @@ export const Player = class extends Rect {
         context.restore();
     }
     inputDown(keyCode) {
-        //console.log(`inputDown: ${keyCode}`);
+        // console.log(`inputDown: ${keyCode}`);
         if (keyCode in this.inputCodes && !(this.action & (ACTION_KO | ACTION_WIN | ACTION_PAUSE))) {
 
             this.inputCodes[keyCode] = true;
@@ -186,8 +189,8 @@ export const Player = class extends Rect {
         }
     }
     inputUp(keyCode) {
+        // console.log(`inputUp: ${keyCode}`);
         if (keyCode in this.inputCodes && !(this.action & (ACTION_KO | ACTION_WIN | ACTION_PAUSE))) {
-            //console.log(`inputUp: ${keyCode}`);
             
             if (keyCode == 65) {
                 this.action &= ~ACTION_ML;
@@ -234,8 +237,8 @@ export const Player = class extends Rect {
         }
     }
     movePlayer(xMove, yMove, dt, xOffset) {
-        let xM = ~~(xMove * dt);
-        let yM = ~~(yMove * dt);
+        let xM = ~~(xMove * dt),
+            yM = ~~(yMove * dt);
         
         let lTileOffset = this.left + xOffset + xM,
             lt = TileMgr.get().getPointTileType(lTileOffset, this.top),

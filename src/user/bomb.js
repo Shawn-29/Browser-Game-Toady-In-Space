@@ -48,9 +48,8 @@ export const Bomb = class extends Rect {
                     this.move(0, Math.trunc((this.bot) / TILE_SIZE + 1) * TILE_SIZE - this.bot - 1);
                 }
                 else {
-                    // check if the bomb hit an enemy
+                    /* check if the bomb hit an enemy */
                     for (const e of data['enemyList']) {
-                        //if (this.collCheck(e, 0)) {
                         if (e.collCheck(this, 0)) {
                             this.explode();
                             break;
@@ -64,7 +63,6 @@ export const Bomb = class extends Rect {
         else if (this.exp) {
             this.timer.update(dt);
             for (let e of data['enemyList']) {
-                //if (this.collCheck(e, 0)) {
                 if (e.collCheck(this, 0)) {
                     e.setHp(20, data, this);
                 }
