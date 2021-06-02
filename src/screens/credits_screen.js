@@ -24,10 +24,10 @@ export const CreditsScreen = class {
         this.modal = new Modal(
             '',
             new ImgButton('./images/ui/ExitBtn.png', function() {
-                    UserMgr.get().clearData();
-                    if (localStorage) {
-                        localStorage.userData = UserMgr.get().getStringJSON();
-                    }
+                    // UserMgr.get().clearData();
+                    // if (localStorage) {
+                    //     localStorage.userData = UserMgr.get().getStringJSON();
+                    // }
                     self.dispatchEvent(EVENT_GAME_DONE);
                 }.bind(this),
                 166, 66,

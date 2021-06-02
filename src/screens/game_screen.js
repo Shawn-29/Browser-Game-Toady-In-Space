@@ -208,7 +208,14 @@ export const GameScreen = class {
             gameScreen.sceneTimer.repeat = true;
             gameScreen.sceneTimer.callback = function() {
                 gameScreen.fadeStep += .03;
+
+                /* check if screen has completely faded out */
                 if (gameScreen.fadeStep > 1) {
+
+                    /* the game is completed so reset the current game path */
+                    UserMgr.get().clearData();
+                    localStorage.userData = UserMgr.get().getStringJSON();
+
                     gameScreen.sceneTimer.reset();
                     this.exitGameScreen();
                     gameScreen.awardPoints();
@@ -867,11 +874,8 @@ export const GameScreen = class {
         UserMgr.get().getData().score = this.gameData['player'].score;
         UserMgr.get().getData().shotType = this.gameData['player'].shotType;
         UserMgr.get().setHighScore(this.gameData['player'].score);
-        
-        if (localStorage) {
-            localStorage.userData = UserMgr.get().getStringJSON();
-            localStorage.highScore = UserMgr.get().getHighScore();
-        }       
+
+        localStorage.highScore = UserMgr.get().getHighScore();
     }
     endLevel() {
 
@@ -884,6 +888,9 @@ export const GameScreen = class {
 
             if (!this.gameData['isSecretLevel']) {
                 UserMgr.get().getData().level = Math.min(UserMgr.get().getData().level + 1, MAX_LEVEL);
+
+                localStorage.userData = UserMgr.get().getStringJSON();
+
                 this.sceneTimer.callback = tempFn;
                 this.resetGame();
             }
