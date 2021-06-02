@@ -183,8 +183,12 @@ export const GameScreen = class {
 
         this.gameCanvas = gameCanvas;
         
-        self.addEventListener('keydown', this.keyDown.bind(this));
-        self.addEventListener('keyup', this.keyUp.bind(this));
+        this.keyDownFn = this.keyDown.bind(this);
+        this.keyUpFn = this.keyUp.bind(this);
+        self.addEventListener('keydown', this.keyDownFn, false);
+        self.addEventListener('keyup', this.keyUpFn, false);
+        // self.addEventListener('keydown', this.keyDown.bind(this));
+        // self.addEventListener('keyup', this.keyUp.bind(this));
         
         /*
             because bind creates a new function object, these functions
@@ -905,6 +909,10 @@ export const GameScreen = class {
     exitGameScreen() {
         TileMgr.get().reset();
         ExpMgr.get().reset();
+
+        /* remove event listeners to prevent a memory leak */
+        self.removeEventListener('keydown', this.keyDownFn, false);
+        self.removeEventListener('keyup', this.keyUpFn, false);
         this.gameCanvas.removeEventListener('touchstart', this.touchStartFn, false);
         this.gameCanvas.removeEventListener('touchend', this.touchEndFn, false);
         this.gameCanvas.removeEventListener('touchmove', this.touchMoveFn, false);
