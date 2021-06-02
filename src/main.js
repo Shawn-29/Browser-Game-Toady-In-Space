@@ -5,7 +5,6 @@ import {OptionsScreen} from './screens/options_screen.js';
 import {TitleScreen} from './screens/title_screen.js';
 
 import {getTimestamp} from './utilities.js';
-// import {hideCamera, scan} from './barcode_scanner/video.js';
 
 import {CANVAS_BASE_HEIGHT, CANVAS_BASE_WIDTH} from './gameplay_constants.js';
 
@@ -99,11 +98,14 @@ self.onload = () => {
     });
     
     const startGame = () => {
-        curScreen = new GameScreen(gameCanvas);
+        /* before transitioning to the next screen, get random level
+            data from the options screen */
+        const secretData = curScreen.reward;
+
+        /* transition to the game screen */
+        curScreen = new GameScreen(gameCanvas, secretData);
         curScreen.loadLevel();
     };
-    
-    //startGame(); // DEBUG
     
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./src/service_worker.js')

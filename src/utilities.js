@@ -28,9 +28,41 @@ export const getImg = (filename) => {
     return img;
 };
 
+export const getRandChoice = (...choices) => {
+
+    const cache = new Map();
+
+    let totalPerc = 0;
+    for (const c of choices) {
+        if (Array.isArray(c)) {
+            totalPerc += Number.isFinite(c[1]) ? c[1] : 0;
+            cache.set(c[0], totalPerc);
+        }
+    }
+
+    if (totalPerc < 100) {
+        const dist = Math.max(0, (100 - totalPerc) / (choices.length - cache.size));
+        for (const c of choices) {
+            if (!Array.isArray(c)) {
+                totalPerc += dist;
+                cache.set(c, totalPerc);
+            }
+        }
+    }
+
+    const chance = randInt(0, 100);
+    for (const [key, value] of cache.entries()) {
+        if (chance <= value) {
+            return key;
+        }
+    }
+
+    return null;
+};
+
 export const getTimestamp = () => {
-    // return window?.performance?.now?.() ?? new Date().getTime();
-    return window.performance && window.performance.now ? window.performance.now() : new Date().getTime();
+    return window?.performance?.now?.() ?? new Date().getTime();
+    // return window.performance && window.performance.now ? window.performance.now() : new Date().getTime();
 };
 
 export const randBool = () => Math.random() >= .5;

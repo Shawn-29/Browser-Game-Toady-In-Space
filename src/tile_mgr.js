@@ -31,12 +31,7 @@ export const TileMgr = {
             TM_tileXDrawOffset = 0,
             TM_scrollDone = false,
             TM_scrollX = 0,
-            TM_numCols = 0,
-
-            isWrapDone = false,
-            wraps = true,
-            wrapped = false;
-
+            TM_numCols = 0;
         return {
             setTileTypes(tileTypes) {
                 for (let i = 0, numTypes = tileTypes.length; i < numTypes; ++i) {
@@ -45,10 +40,8 @@ export const TileMgr = {
                         tileTypes[i].type)
                     );
                 }
-                // console.log('tilemgr', TM_tileTypes);
             },
             setTiles(tiles) {
-                console.log('tilemgr', tiles);
                 for (const t of tiles) {
                     TM_tiles.push(t);
                 }
@@ -56,17 +49,15 @@ export const TileMgr = {
                 TM_numCols = TM_tiles[0].length;
             },
             setTile(row, col, type) {
-                try {
-                    TM_tiles[Math.trunc(col / TILE_SIZE)]
-                        [Math.trunc(row / TILE_SIZE)] = type;
+                TM_tiles[Math.trunc(col / TILE_SIZE)]
+                    [Math.trunc(row / TILE_SIZE)] = type;
 
-                    if (type === undefined) {
-                        throw TypeError;
-                    }
-                }
-                catch (TypeError) {
+                if (type === undefined) {
                     return;
-                }               
+                }
+            },
+            getLevelWidth() {
+                return TM_tileDrawLimit * TILE_SIZE;
             },
             getPointTileType(x, y) {
                 try {
@@ -91,30 +82,21 @@ export const TileMgr = {
                     return 0;
                 }
             },
-            getIsWrapDone() {
-                return wraps && isWrapDone;
-            },
             draw(context) {
-                let dc = 0;
-                try {
-                    for (let row = 0; row < TM_tiles.length; ++row) {
-                        for (let col = TM_tileXDrawOffset; col < TM_tileDrawLimit + 1; ++col) {
-                            ++dc;
-                            context.drawImage(
-                                TM_tileTypes[TM_tiles[row][col]].img,
-                                TILE_SIZE * col - TM_scrollX,
-                                TILE_SIZE * row
-                            );
-                        }
+                for (let row = 0; row < TM_tiles.length; ++row) {
+                    for (let col = TM_tileXDrawOffset; col < TM_tileDrawLimit + 1; ++col) {
+                        context.drawImage(
+                            TM_tileTypes[TM_tiles[row][col]].img,
+                            TILE_SIZE * col - TM_scrollX,
+                            TILE_SIZE * row
+                        );
                     }
                 }
-                catch (e) {
-                    debugger;
-                }
-
-                if (dc === 0) {
-                    // debugger;
-                }
+            },
+            getXPos(xPos, scrollSpeed) {
+                /* get an x position in the level based on scroll speed but make
+                    sure it doesn't exceed the level's boundaries */
+                return Math.min(xPos + scrollSpeed, (TM_numCols - TM_tilesPerRow) * TILE_SIZE);
             },
             update(data) {
                 if (!TM_scrollDone) {
@@ -124,40 +106,12 @@ export const TileMgr = {
 
                     /* check if the end of the level has been reached */
                     if (TM_tileDrawLimit >= TM_numCols) {
-                    //     console.log('gameXPos', data['gameXPos']);
-                    //     if (wrapped) {
 
-                    //         wrapped = false;
-                    //         // data['gameXPos'] -= (TM_tilesPerRow + 1) * TILE_SIZE;
-                    //         data['gameXPos'] = data['player'].x;
+                        TM_scrollDone = true;
 
-                    //         TM_tileDrawLimit = TM_tilesPerRow;
-                    //         TM_tileXDrawOffset = ~~Math.abs(data['gameXPos'] / TILE_SIZE);
-                    //         TM_scrollX = data['gameXPos'];
-
-                    //         for (let i = 0; i < TM_tiles.length; ++i) {
-                    //             TM_tiles[i] = TM_tiles[i].slice(TM_tilesPerRow + 1);
-                    //         }
-                    //     }
-                    //     else if (0 && wraps) {
-                    //         wrapped = true;
-                    //         isWrapDone = false;
-                    //         for (const tileRow of TM_tiles) {
-                    //             tileRow.push(
-                    //                 ...Array.from(
-                    //                     {length: TM_tilesPerRow + 1},
-                    //                     (_, index) => tileRow[index]
-                    //                 )
-                    //             )
-                    //         }
-                    //     }
-                    //     else {
-                            TM_scrollDone = true;
-
-                            /* draw one fewer column because the level
-                                is no longer scrolling */
-                            --TM_tileDrawLimit;
-                    //     }
+                        /* draw one fewer column because the level
+                            is no longer scrolling */
+                        --TM_tileDrawLimit;
                     }
                 }
             },
@@ -168,7 +122,10 @@ export const TileMgr = {
                 TM_tileTypes.length = 0;
                 TM_tiles.length = 0;
                 TM_scrollDone = false;
+                TM_scrollX = 0;
                 TM_numCols = 0;
+                TM_tileXDrawOffset = 0;
+                TM_tileDrawLimit = 0;
             }
         };
     },
