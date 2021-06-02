@@ -53,8 +53,6 @@ export const ShotRegular = class extends Shot {
     static getShotLimit() { return 3; }
     static getDelay() { return 0.5; }
 };
-ShotRegular.power = 1000;
-// ShotRegular.img = getImg('Images/ShotRegular.png');
-// ShotRegular.imgIcon = getImg('Images/IconRegular.png');
+ShotRegular.power = 10;
 ShotRegular.img = getImg('./images/shots/ShotRegular.png');
 ShotRegular.imgIcon = getImg('./images/icons/IconRegular.png');

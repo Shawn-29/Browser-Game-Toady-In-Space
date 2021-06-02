@@ -1,5 +1,6 @@
 import {Shot} from './shot_base.js';
 import {TileMgr, checkTileBits, TILE_TYPES} from '../tile_mgr.js';
+import {Timer} from '../timer.js';
 
 import {getImg} from '../utilities.js';
 

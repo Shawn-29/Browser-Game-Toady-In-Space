@@ -139,9 +139,6 @@ export const ShotBall = class extends Shot {
     static getDelay() { return 2; }
 };
 ShotBall.power = 15;
-// ShotBall.img = getImg('Images/ShotBall.png');
-// ShotBall.imgSpark = getImg('Images/Sparkle.png');
-// ShotBall.imgIcon = getImg('Images/IconBall.png');
 ShotBall.img = getImg('./images/shots/ShotBall.png');
 ShotBall.imgSpark = getImg('./images/shots/Sparkle.png');
 ShotBall.imgIcon = getImg('./images/icons/IconBall.png');

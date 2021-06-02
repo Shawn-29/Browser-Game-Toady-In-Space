@@ -1,3 +1,4 @@
+import {Rect} from '../rect.js';
 import {Shot} from './shot_base.js';
 import {Timer} from '../timer.js';
 
