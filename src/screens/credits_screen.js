@@ -57,7 +57,8 @@ export const CreditsScreen = class {
                     this.modal.hidden = false;
                 }
             }.bind(this);
-            this.timer.callback(); // make the first image appear
+            /* make the first image appear for the credits */
+            this.timer.callback();
         }.bind(this), true).start();
     }
     update(dt, data = null) {
