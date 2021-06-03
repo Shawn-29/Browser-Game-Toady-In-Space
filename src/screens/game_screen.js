@@ -187,8 +187,6 @@ export const GameScreen = class {
         this.keyUpFn = this.keyUp.bind(this);
         self.addEventListener('keydown', this.keyDownFn, false);
         self.addEventListener('keyup', this.keyUpFn, false);
-        // self.addEventListener('keydown', this.keyDown.bind(this));
-        // self.addEventListener('keyup', this.keyUp.bind(this));
         
         /*
             because bind creates a new function object, these functions
