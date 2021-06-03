@@ -193,7 +193,7 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-  const dataUrl = 'https://shawn-29.github.io/Progressive-Web-App/';
+  const dataUrl = 'https://shawn-29.github.io/PWA_ToadyInSpace/';
   if (e.request.url.indexOf(dataUrl) > -1) {
     e.respondWith(
       caches.open(dataCacheName).then(async (cache) => {
