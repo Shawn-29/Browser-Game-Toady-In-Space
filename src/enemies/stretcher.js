@@ -79,6 +79,9 @@ export class Stretcher extends Enemy {
         this.setBounds(42, 62);
         this.dir ^= 1;
     }
+    getImg() {
+        return Stretcher.imgs[this.animIndex];
+    }
 };
 Stretcher.imgs = [
     getImg('./images/enemies/StretcherA.png'),

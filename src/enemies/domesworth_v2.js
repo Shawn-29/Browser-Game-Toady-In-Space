@@ -79,6 +79,9 @@ export const DomesworthV2 = class extends Enemy {
                               this.y - (DomesworthV2.img.height >> 1));          
         }
     }
+    getImg() {
+        return DomesworthV2.img;
+    }
 };
 DomesworthV2.img = getImg('./images/enemies/DomesworthV2.png');
 DomesworthV2.imgShots = [

@@ -82,6 +82,9 @@ export class VectorToad extends Enemy {
                              this.y - VectorToad.img.height * 0.5);
         }
     }
+    getImg() {
+        return VectorToad.img;
+    }
 };
 VectorToad.img = getImg('./images/enemies/VectorToad.png');
 VectorToad.imgShot = getImg('./images/enemies/VectorToadShot.png');

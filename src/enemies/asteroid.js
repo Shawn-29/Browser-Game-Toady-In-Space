@@ -45,6 +45,9 @@ export const Asteroid = class extends Enemy {
                              this.y - Asteroid.imgs[this.animIndex].height * 0.5);
         }        
     }
+    getImg() {
+        return Asteroid.imgs[this.animIndex];
+    }
 };
 Asteroid.imgs = [
     getImg('./images/enemies/AsteroidLg.png'),

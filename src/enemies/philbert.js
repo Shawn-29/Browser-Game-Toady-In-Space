@@ -48,6 +48,9 @@ export const Philbert = class extends Enemy {
                              this.y - Philbert.imgs[this.animIndex].height * 0.5);
         }
     }
+    getImg() {
+        return Philbert.imgs[this.animIndex];
+    }
 };
 Philbert.imgs = [
     getImg('./images/enemies/PhilbertA.png'),

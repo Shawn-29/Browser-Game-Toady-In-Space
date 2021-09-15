@@ -6,7 +6,7 @@ import {SCORE_SHEET} from '../score_sheet.js';
 export class Enemy extends Rect {
     constructor(hp, width, height, x = 0, y = 0) {
         super(width, height, x, y);
-        this.hp = hp;
+        this.hp = this.maxHp = hp;
         this.done = false;
         this.blinkTimer = new Timer(0.1, null, false);
     }
@@ -23,12 +23,14 @@ export class Enemy extends Rect {
     collCheck(rect, xOffset = 0) {
         return rect.collCheck(this, xOffset);
     }
-    setHp(amt, data) {
+    setHp(amt, data, addExp = true) {
         if (this.blinkTimer.started)
             return false;
         this.hp -= amt;
         if (this.hp <= 0) {
-            ExpMgr.get().addExp(this.x, this.y);
+            if (addExp) {
+                ExpMgr.get().addExp(this.x, this.y);
+            }
             data['player'].tempScore += SCORE_SHEET[this.constructor.name];
             this.done = true;
         }

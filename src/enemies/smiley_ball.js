@@ -131,5 +131,8 @@ export const SmileyBall = class extends Enemy {
             case 5: this.hue = '#f80'; break;
         }
     }
+    getImg() {
+        return SmileyBall.img;
+    }
 };
 SmileyBall.img = getImg('./images/enemies/SmileyBall.png');

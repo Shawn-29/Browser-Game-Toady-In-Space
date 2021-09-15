@@ -68,10 +68,15 @@ export const Domesworth = class extends Enemy {
             drawHitFrame(context, this, Domesworth.img, xOffset);
         }
         else {
-            context.drawImage(Domesworth.img,
-                              this.x - xOffset - Domesworth.img.width * 0.5,
-                              this.y - Domesworth.img.height * 0.5);          
+            context.drawImage(
+                Domesworth.img,
+                this.x - xOffset - Domesworth.img.width * 0.5,
+                this.y - Domesworth.img.height * 0.5
+            );          
         }
+    }
+    getImg() {
+        return Domesworth.img;
     }
 };
 Domesworth.img = getImg('./images/enemies/Domesworth.png');
