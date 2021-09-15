@@ -36,6 +36,7 @@ const filesToCache = [
   './screens/options_screen.js',
   './screens/screen.js',
   './screens/title_screen.js',
+  './shots/shot_freeze.js',
   './shots/shot_ball.js',
   './shots/shot_base.js',
   './shots/shot_beam.js',
@@ -71,6 +72,7 @@ const filesToCache = [
   '../images/ui/ExitBtn.png',
   '../images/ui/FireBtn.png',
   '../images/ui/HPBar.png',
+  '../images/icons/IconFreeze.png',
   '../images/icons/IconBall.png',
   '../images/icons/IconDrill.png',
   '../images/icons/IconFireWave.png',
@@ -91,6 +93,13 @@ const filesToCache = [
   '../images/shots/ShotLazerB.png',
   '../images/shots/ShotRegular.png',
   '../images/shots/ShotCutter.png',
+  '../images/shots/ShotFreeze.png',
+  '../images/shots/IceCubeA.png',
+  '../images/shots/IceCubeB.png',
+  '../images/shots/IceCubeC.png',
+  '../images/shots/ShatterA.png',
+  '../images/shots/ShatterB.png',
+  '../images/shots/ShatterC.png',
   '../images/ui/StartBtn.png',
   '../images/ui/StatusBar.png',
   '../images/ui/TitleScreen.png',
@@ -145,6 +154,7 @@ const filesToCache = [
   '../images/items/ShotSwap2.png',
   '../images/items/ShotSwap3.png',
   '../images/items/ShotSwap4.png',
+  '../images/items/ShotSwap5.png',
   '../images/items/SpeedBoost.png',
   '../images/tiles/TileEurth1.png',
   '../images/tiles/TileEurth2.png',
@@ -193,7 +203,7 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-  const dataUrl = 'https://shawn-29.github.io/PWA_ToadyInSpace/';
+  const dataUrl = 'https://shawn-29.github.io/Progressive-Web-App/';
   if (e.request.url.indexOf(dataUrl) > -1) {
     e.respondWith(
       caches.open(dataCacheName).then(async (cache) => {
