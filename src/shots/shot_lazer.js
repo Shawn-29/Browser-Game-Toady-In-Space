@@ -67,18 +67,18 @@ export const ShotLazer = class extends Shot {
             }
         }
         else if (this.fired) {
-            let xM = this.vel[0] * dt;
+            const xM = this.vel[0] * dt;
             if (this.left >= CANVAS_BASE_WIDTH) {
                 this.fired = false;
             }
             else {
-                let xOffset = data['gameXPos'];
+                const xOffset = data['gameXPos'];
                 if (checkTileBits(TileMgr.get().getPointTileType(this.right + xOffset, this.top),
                                  TileMgr.get().getPointTileType(this.right + xOffset, this.bot)) & TILE_TYPES['TILE_WALL']) {
                     this.splitLazer();
                 }
                 else {
-                    for (let e of data['enemyList']) {
+                    for (const e of data['enemyList']) {
                         if (e.collCheck(this, xOffset) && e.setHp(ShotLazer.power, data)) {
                             this.splitLazer();
                             break;
