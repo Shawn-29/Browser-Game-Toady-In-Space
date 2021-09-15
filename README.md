@@ -13,4 +13,4 @@ In this thrilling horizontal arcade shooter, Toady pilots his signature spacecra
 
 ## Shot Guide
 
-![Shot guide image](https://github.com/Shawn-29/ToadyInSpace/blob/main/images/samples/ShotGuide.png)
+![Shot guide image](https://github.com/Shawn-29/ToadyInSpace/blob/main/images/samples/ShotGuideSm.png)
