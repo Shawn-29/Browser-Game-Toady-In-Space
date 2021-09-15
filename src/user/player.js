@@ -40,7 +40,7 @@ export const Player = class extends Rect {
         this.setShotType(UserMgr.get().getData(UserMgr.get().getActiveInd()).shotType);
 
         /* debug - uncomment the line below to give the player a certain shot type to test */
-        // this.setShotType('ShotBeam');
+        // this.setShotType('ShotFreeze');
         
         this.bomb = new Bomb();
         
