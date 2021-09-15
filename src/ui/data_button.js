@@ -6,6 +6,7 @@ import {ShotCutter} from '../shots/shot_cutter.js';
 import {ShotDrill} from '../shots/shot_drill.js';
 import {ShotBall} from '../shots/shot_ball.js';
 import {ShotBeam} from '../shots/shot_beam.js';
+import {ShotFreeze} from '../shots/shot_freeze.js';
 
 import {MAX_SCORE_DIGITS} from '../gameplay_constants.js';
 
@@ -32,6 +33,7 @@ export const DataButton = class extends Button {
             case 'ShotDrill': this.img = ShotDrill.imgIcon; break;
             case 'ShotBall': this.img = ShotBall.imgIcon; break;
             case 'ShotBeam': this.img = ShotBeam.imgIcon; break;
+            case 'ShotFreeze': this.img = ShotFreeze.imgIcon; break;
         }       
     }
     draw(context) {
