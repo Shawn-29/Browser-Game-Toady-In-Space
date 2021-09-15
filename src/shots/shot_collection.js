@@ -5,6 +5,7 @@ import {ShotCutter} from './shot_cutter.js';
 import {ShotDrill} from './shot_drill.js';
 import {ShotBall} from './shot_ball.js';
 import {ShotBeam} from './shot_beam.js';
+import {ShotFreeze} from './shot_freeze.js';
 import {Timer} from '../timer.js';
 
 export const ShotCollection = class {
@@ -59,12 +60,20 @@ export const ShotCollection = class {
                 this.shots.push(new ShotBeam());
                 this.imgIcon = ShotBeam.imgIcon;
                 break;
+            case 'ShotFreeze':
+                this.limit = ShotFreeze.getShotLimit();
+                this.timer.dur = ShotFreeze.getDelay();
+                for (let i = 0; i < this.limit; ++i) {
+                    this.shots.push(new ShotFreeze());
+                }
+                this.imgIcon = ShotFreeze.imgIcon;
+                break;
         }
     }
     update(dt, data = null) {
         this.timer.update(dt, data);
         
-        for (let shot of this.shots) {
+        for (const shot of this.shots) {
             shot.update(dt, data);
         }
     }
@@ -74,7 +83,7 @@ export const ShotCollection = class {
         }        
     }
     reset() {
-        for (let shot of this.shots) {
+        for (const shot of this.shots) {
             shot.fired = false;
         }           
     }
