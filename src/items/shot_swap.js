@@ -15,6 +15,7 @@ export const ShotSwap = class extends Item {
                 case 1: data['player'].setShotType('ShotLazer'); break;
                 case 2: data['player'].setShotType('ShotFireWave'); break;
                 case 3: data['player'].setShotType('ShotCutter'); break;
+                case 4: data['player'].setShotType('ShotFreeze'); break;
             }
             this.done = true;
         }         
@@ -34,7 +35,8 @@ ShotSwap.imgs = [
     getImg('./images/items/ShotSwap1.png'),
     getImg('./images/items/ShotSwap2.png'),
     getImg('./images/items/ShotSwap3.png'),
-    getImg('./images/items/ShotSwap4.png')
+    getImg('./images/items/ShotSwap4.png'),
+    getImg('./images/items/ShotSwap5.png')
 ];
 ShotSwap.animIndex = 0;
 ShotSwap.blink = false;
