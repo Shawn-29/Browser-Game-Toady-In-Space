@@ -24,7 +24,7 @@ export const Timer = class {
             if (this.curTime >= this.endTime) {
                 this.done = true;
                 this.started = false;
-                if (this.callback !== null) {
+                if (typeof this.callback === 'function') {
                     this.callback(data);
                 }
                 if (this.repeat) {

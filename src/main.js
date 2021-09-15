@@ -12,7 +12,8 @@ self.onload = () => {
     const gameCanvas = document.getElementById('game-canvas'),
         context = gameCanvas.getContext("2d"),
         btnCancelScan = document.getElementById('btn-cancel-scan'),
-        btnScan = document.getElementById('btn-scan');
+        btnScan = document.getElementById('btn-scan'),
+        bufferCanvas = document.getElementById('buffer');
 
     let curScreen = null;
     
@@ -35,12 +36,15 @@ self.onload = () => {
         gameCanvas.style.width = window.newGameWidth + "px";
         gameCanvas.style.height = window.newGameHeight + "px";
 
+        bufferCanvas.style.width = window.newGameWidth + "px";
+        bufferCanvas.style.height = window.newGameHeight + "px";
+
         window.newGameX = (viewport.width - window.newGameWidth) / 2;
         window.newGameY = (viewport.height - window.newGameHeight) / 2;
         
         /* pad the game window for centering */
         gameCanvas.style.padding = window.newGameY + "px " + window.newGameX + "px";
-        
+        bufferCanvas.style.padding = window.newGameY + "px " + window.newGameX + "px";        
     };
     
     self.addEventListener('resize', resizeGame);

@@ -13,6 +13,8 @@ export const Rect = class {
         this.right = ~~(this.x + width * 0.5);
         this.top = ~~(this.y - height * 0.5);
         this.bot = ~~(this.y + height * 0.5);
+        this.width = width;
+        this.height = height;
         return this;
     }
     setPos(x, y) {
