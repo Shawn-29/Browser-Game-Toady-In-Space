@@ -1,7 +1,3 @@
-import {getImg, randBool, randInt} from '../utilities.js';
-import {randAsteroid, randEnemy} from '../enemies/rand_enemy.js';
-import {randItem} from '../items/random_item.js';
-
 import {ExpMgr} from '../explosion_mgr.js';
 import {Player, ACTION_KO, ACTION_WIN} from '../user/player.js';
 import {Rect} from '../rect.js';
@@ -9,6 +5,11 @@ import {Screen} from './screen.js';
 import {TileMgr, TILE_SIZE} from '../tile_mgr.js';
 import {Timer} from '../timer.js';
 import {UserMgr} from '../user/user_mgr.js';
+
+/* import helper functions */
+import {getImg, randBool, randInt} from '../utilities.js';
+import {randAsteroid, randEnemy} from '../enemies/rand_enemy.js';
+import {randItem} from '../items/random_item.js';
 
 /* import constants */
 import {
@@ -166,7 +167,7 @@ export const GameScreen = class {
         
         this.statusBar = getImg('./images/ui/StatusBar.png');
         
-        this.sceneTimer = new Timer(1.01, function() {
+        this.sceneTimer = new Timer(.01, function() {
             this.draw = this.drawGame;
             this.levelDone = false;
         }.bind(this), false);
@@ -183,19 +184,19 @@ export const GameScreen = class {
 
         this.gameCanvas = gameCanvas;
         
-        this.keyDownFn = this.keyDown.bind(this);
-        this.keyUpFn = this.keyUp.bind(this);
-        self.addEventListener('keydown', this.keyDownFn, false);
-        self.addEventListener('keyup', this.keyUpFn, false);
-        
         /*
             because bind creates a new function object, these functions
             must be stored so that they can be removed later if the user
             exits the game screen
         */
+        this.keyDownFn = this.keyDown.bind(this);
+        this.keyUpFn = this.keyUp.bind(this);
         this.touchStartFn = this.touchStart.bind(this);
         this.touchEndFn = this.touchEnd.bind(this);
         this.touchMoveFn = this.touchMove.bind(this);
+        
+        self.addEventListener('keydown', this.keyDownFn, false);
+        self.addEventListener('keyup', this.keyUpFn, false);
         this.gameCanvas.addEventListener('touchstart', this.touchStartFn, false);
         this.gameCanvas.addEventListener('touchend', this.touchEndFn, false);
         this.gameCanvas.addEventListener('touchmove', this.touchMoveFn, false);
@@ -381,7 +382,7 @@ export const GameScreen = class {
         }
         
         /* display coodinate and object data for debugging */
-        context.save();
+        // context.save();
         // context.fillStyle = '#fff';
         // context.font = '14px sans-serif';
         // context.fillText('Player Y: ' + String(this.gameData['player'].y), 4, 110);
