@@ -1,15 +1,17 @@
 /*
 =============== 
-Variables
+#Variables
 ===============
 */
-
 :root {
     --border-radius: 14px;
 }
 
-
-/* CSS reset rules */
+/*
+=============== 
+#Reset Rules
+===============
+*/
 *,
 *::after,
 *::before {
@@ -20,6 +22,11 @@ Variables
     vertical-align: baseline;
 }
 
+/*
+=============== 
+#General Tags
+===============
+*/
 html {
     font-size: 16px;
 }
@@ -31,6 +38,29 @@ body {
     overflow-y: hidden;
 }
 
+noscript {
+    background-color: #108800;
+    background-image: linear-gradient(#063000, #108800 20%, #063000 95%);
+    border-bottom: 2px solid #16bb00;
+    border-top: 2px solid #16bb00;
+    box-shadow: 0 4px 4px #000;
+    color: #eee;
+    display: inline-block;
+    font-size: 1.1rem;
+    padding: .65rem 0;
+    text-align: center;
+    width: 100%;
+}
+
+noscript a {
+    color: #fff01e;
+}
+
+/*
+=============== 
+#Camera
+===============
+*/
 #camera-area {
     color: #fb0;
     font-weight: bold;
