@@ -1,16 +1,16 @@
-import {Rect} from '../rect.js';
-import {TileMgr, checkTileBits, TILE_SIZE, TILE_TYPES} from '../tile_mgr.js';
-import {Timer} from '../timer.js';
+import { Rect } from '../rect.js';
+import { TileMgr, checkTileBits, TILE_SIZE, TILE_TYPES, LEVEL_HEIGHT } from '../tile_mgr.js';
+import { Timer } from '../timer.js';
 
-import {getImg} from '../utilities.js';
+import { getImg } from '../utilities.js';
 
-import {BASE_MOVE_VEL, LEVEL_HEIGHT} from '../gameplay_constants.js';
+import { BASE_MOVE_VEL } from '../gameplay_constants.js';
 
 export const Bomb = class extends Rect {
     constructor() {
         super(38, 26);
         this.animIndex = 0;
-        this.timer = new Timer(0.08, function() {
+        this.timer = new Timer(0.08, function () {
             ++this.animIndex;
             if (this.animIndex >= Bomb.imgs.length) {
                 this.dropped = false;
@@ -18,7 +18,7 @@ export const Bomb = class extends Rect {
             }
             else {
                 this.setBounds(Bomb.imgs[this.animIndex].width,
-                                        Bomb.imgs[this.animIndex].height);
+                    Bomb.imgs[this.animIndex].height);
             }
         }.bind(this), true);
         this.reset();
@@ -32,16 +32,16 @@ export const Bomb = class extends Rect {
         if (this.dropped && !this.exp) {
 
             let yM = BASE_MOVE_VEL * dt;
-            
+
             if (this.top + yM >= LEVEL_HEIGHT) {
                 this.explode();
                 yM = LEVEL_HEIGHT - this.bot;
             }
             else {
                 let result = checkTileBits(
-                    TileMgr.get().getPointTileType(this.left, this.bot + yM),
-                    TileMgr.get().getPointTileType(this.x, this.bot + yM),
-                    TileMgr.get().getPointTileType(this.right, this.bot + yM)
+                    TileMgr.getPointTileType(this.left, this.bot + yM),
+                    TileMgr.getPointTileType(this.x, this.bot + yM),
+                    TileMgr.getPointTileType(this.right, this.bot + yM)
                 );
                 if (result & TILE_TYPES['TILE_WALL']) {
                     this.explode();

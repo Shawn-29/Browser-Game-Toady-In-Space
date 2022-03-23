@@ -1,11 +1,11 @@
-import {Bomb} from './bomb.js';
-import {Rect} from '../rect.js';
-import {ShotCollection} from '../shots/shot_collection.js';
-import {TileMgr, checkTileBits, TILE_SIZE, TILE_TYPES} from '../tile_mgr.js';
-import {UserMgr} from './user_mgr.js';
-import {Timer} from '../timer.js';
+import { Bomb } from './bomb.js';
+import { Rect } from '../rect.js';
+import { ShotCollection } from '../shots/shot_collection.js';
+import { TileMgr, checkTileBits, TILE_SIZE, TILE_TYPES, LEVEL_HEIGHT } from '../tile_mgr.js';
+import { UserMgr } from './user_mgr.js';
+import { Timer } from '../timer.js';
 
-import {getImg} from '../utilities.js';
+import { getImg } from '../utilities.js';
 
 import {
     BASE_MOVE_VEL,
@@ -13,7 +13,6 @@ import {
     CANVAS_BASE_WIDTH,
     DASH_BOOST,
     HAZARD_DMG,
-    LEVEL_HEIGHT,
     MAX_SCORE_DIGITS,
     WALL_DMG
 } from '../gameplay_constants.js';
@@ -28,24 +27,24 @@ export const Player = class extends Rect {
         super(78, 36, 80, 160);
         this.onKO = onKO;
         this.onLevelEnd = onLevelEnd;
-        
-        let data = UserMgr.get().getData();
+
+        const data = UserMgr.getData();
         this.score = this.tempScore = data['score'];
         this.maxHP = 200;
         this.shots = null;
-        
+
         /* no shot swap items will appear if a secret shot is unlocked */
         this.hasSecret = false;
 
-        this.setShotType(UserMgr.get().getData(UserMgr.get().getActiveInd()).shotType);
+        this.setShotType(UserMgr.getData(UserMgr.getActiveInd()).shotType);
 
         /* debug - uncomment the line below to give the player a certain shot type to test */
         // this.setShotType('ShotFreeze');
-        
+
         this.bomb = new Bomb();
-        
+
         this.reset();
-        
+
         this.imgs = [
             getImg('./images/player/Toady.png'),
             getImg('./images/player/ToadyKO.png'),
@@ -53,7 +52,7 @@ export const Player = class extends Rect {
             getImg('./images/player/Toady3.png')
         ];
         this.hpBar = getImg('./images/ui/HPBar.png');
-        
+
         this.blinkAccum = 1;
         this.blinkTimer = new Timer(1.0, this.blinkEnd.bind(this), false);
     }
@@ -105,39 +104,39 @@ export const Player = class extends Rect {
             else {
                 this.move(0, ~~(-BASE_MOVE_VEL * 1.5 * dt));
             }
-            
+
             return;
         }
-        
+
         this.movePlayer(this.xMove, this.yMove, dt, data['gameXPos']);
-        
+
         if (this.action & ACTION_FIRE) {
             this.shots.fire(this.right, this.bot);
         }
         this.shots.update(dt, data);
-        
+
         if (this.action & ACTION_BOMB) {
             this.bomb.drop(this.x + data['gameXPos'], this.bot);
         }
         this.bomb.update(dt, data);
     }
     draw(context, xOffset = 0) {
-        
+
         if (this.blinkAccum & 0x5) {
             context.drawImage(this.imgs[this.animIndex], this.x - this.imgs[this.animIndex].width * 0.5,
-                             this.y - this.imgs[this.animIndex].height * 0.5);
+                this.y - this.imgs[this.animIndex].height * 0.5);
         }
-        
+
         this.shots.draw(context, xOffset);
-        
+
         this.bomb.draw(context, xOffset);
-        
+
         context.drawImage(this.hpBar, 3, 5);
         context.fillStyle = '#f00';
         context.fillRect(21, 16, this.hp * (70 / this.maxHP), 9);
         context.drawImage(this.shots.imgIcon, 104, 5);
         context.drawImage(Bomb.imgs[0], 14, 40);
-        
+
         context.save();
         context.fillStyle = '#fff';
         context.shadowColor = '#000';
@@ -155,7 +154,7 @@ export const Player = class extends Rect {
         if (keyCode in this.inputCodes && !(this.action & (ACTION_KO | ACTION_WIN | ACTION_PAUSE))) {
 
             this.inputCodes[keyCode] = true;
-            
+
             if (keyCode == 65) {
                 this.action |= ACTION_ML;
                 this.xMove = -this.vel;
@@ -191,7 +190,7 @@ export const Player = class extends Rect {
     inputUp(keyCode) {
         // console.log(`inputUp: ${keyCode}`);
         if (keyCode in this.inputCodes && !(this.action & (ACTION_KO | ACTION_WIN | ACTION_PAUSE))) {
-            
+
             if (keyCode == 65) {
                 this.action &= ~ACTION_ML;
                 if (this.action & ACTION_MR) {
@@ -232,17 +231,17 @@ export const Player = class extends Rect {
                 this.action &= ~ACTION_FIRE;
             if (keyCode == 75)
                 this.action &= ~ACTION_BOMB;
-            
+
             this.inputCodes[keyCode] = false;
         }
     }
     movePlayer(xMove, yMove, dt, xOffset) {
         let xM = ~~(xMove * dt),
             yM = ~~(yMove * dt);
-        
+
         let lTileOffset = this.left + xOffset + xM,
-            lt = TileMgr.get().getPointTileType(lTileOffset, this.top),
-            lb = TileMgr.get().getPointTileType(lTileOffset, this.bot);
+            lt = TileMgr.getPointTileType(lTileOffset, this.top),
+            lb = TileMgr.getPointTileType(lTileOffset, this.bot);
 
         let result = checkTileBits(lt, lb);
         if (result & TILE_TYPES['TILE_WALL']) {
@@ -260,11 +259,11 @@ export const Player = class extends Rect {
             if (result & TILE_TYPES['TILE_HAZARD']) {
                 this.setHp(HAZARD_DMG);
             }
-            
+
             let rTileOffset = this.right + xOffset + xM,
-                rt = TileMgr.get().getPointTileType(rTileOffset, this.top),
-                rb = TileMgr.get().getPointTileType(rTileOffset, this.bot);            
-            
+                rt = TileMgr.getPointTileType(rTileOffset, this.top),
+                rb = TileMgr.getPointTileType(rTileOffset, this.bot);
+
             result = checkTileBits(rt, rb);
             if (result & TILE_TYPES['TILE_WALL']) {
                 xM = Math.trunc((rTileOffset) / TILE_SIZE) * TILE_SIZE - this.right - 1 - xOffset;
@@ -303,32 +302,32 @@ export const Player = class extends Rect {
             yM = LEVEL_HEIGHT - this.bot;
         }
         else {
-            
-            let lt = TileMgr.get().getPointTileType(this.left + xOffset + xM, this.top + yM),
-                rt = TileMgr.get().getPointTileType(this.right + xOffset + xM, this.top + yM),
-                xt = TileMgr.get().getPointTileType(this.x + xOffset + xM, this.top + yM);
-            
+
+            let lt = TileMgr.getPointTileType(this.left + xOffset + xM, this.top + yM),
+                rt = TileMgr.getPointTileType(this.right + xOffset + xM, this.top + yM),
+                xt = TileMgr.getPointTileType(this.x + xOffset + xM, this.top + yM);
+
             result = checkTileBits(lt, rt, xt);
-            
+
             if (result & (TILE_TYPES['TILE_WALL'])) {
                 yM = Math.trunc((this.top) / TILE_SIZE) * TILE_SIZE - this.top;
-                this.setHp(WALL_DMG);              
+                this.setHp(WALL_DMG);
             }
             else {
 
-                let lb = TileMgr.get().getPointTileType(this.left + xOffset + xM, this.bot + yM),
-                    rb = TileMgr.get().getPointTileType(this.right + xOffset + xM, this.bot + yM),
-                    xb = TileMgr.get().getPointTileType(this.x + xOffset + xM, this.bot + yM);
-                
+                let lb = TileMgr.getPointTileType(this.left + xOffset + xM, this.bot + yM),
+                    rb = TileMgr.getPointTileType(this.right + xOffset + xM, this.bot + yM),
+                    xb = TileMgr.getPointTileType(this.x + xOffset + xM, this.bot + yM);
+
                 result = checkTileBits(lb, rb, xb);
                 if (result & TILE_TYPES['TILE_WALL']) {
                     yM = Math.trunc((this.bot) / TILE_SIZE + 1) * TILE_SIZE - this.bot - 1;
-                    this.setHp(WALL_DMG);               
-                }                
+                    this.setHp(WALL_DMG);
+                }
             }
-        }        
-        
-        this.move(xM, yM);        
+        }
+
+        this.move(xM, yM);
     }
     blinkEnd() {
         this.action &= ~ACTION_BL;
@@ -363,7 +362,7 @@ export const Player = class extends Rect {
     win() {
         this.action = (ACTION_WIN | ACTION_PAUSE);
         this.score = this.tempScore;
-        this.onLevelEnd();        
+        this.onLevelEnd();
     }
     pause() {
         this.action = ACTION_PAUSE;
