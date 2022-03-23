@@ -1,9 +1,9 @@
-import {Item} from '../items/item_base.js';
-import {Shot} from './shot_base.js';
+import { Item } from '../items/item_base.js';
+import { Shot } from './shot_base.js';
 
-import {drawImgR, getImg} from '../utilities.js';
+import { drawImgR, getImg } from '../utilities.js';
 
-import {RAD_2_DEGS} from '../gameplay_constants.js';
+import { RAD_2_DEGS } from '../gameplay_constants.js';
 
 export const ShotCutter = class extends Shot {
     constructor() {
@@ -38,7 +38,7 @@ export const ShotCutter = class extends Shot {
                 this.items.clear();
             }
             this.move(this.vel[0] * dt, this.vel[1] * dt);
-            
+
             for (let i of data['itemList']) {
                 if (i instanceof Item) {
                     if (this.collCheck(i, data['gameXPos'])) {
@@ -46,11 +46,11 @@ export const ShotCutter = class extends Shot {
                     }
                 }
             }
-            
+
             for (let i of this.items) {
                 i.setPos(this.x + data['gameXPos'], this.y);
             }
-            
+
             for (let e of data['enemyList']) {
                 //if (this.collCheck(e, data['gameXPos'])) {
                 if (e.collCheck(this, data['gameXPos'])) {

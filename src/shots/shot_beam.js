@@ -1,10 +1,10 @@
-import {Rect} from '../rect.js';
-import {Shot} from './shot_base.js';
-import {Timer} from '../timer.js';
+import { Rect } from '../rect.js';
+import { Shot } from './shot_base.js';
+import { Timer } from '../timer.js';
 
-import {getImg} from '../utilities.js';
+import { getImg } from '../utilities.js';
 
-import {CANVAS_BASE_WIDTH} from '../gameplay_constants.js';
+import { CANVAS_BASE_WIDTH } from '../gameplay_constants.js';
 
 export const ShotBeam = class extends Shot {
     constructor() {
@@ -12,7 +12,7 @@ export const ShotBeam = class extends Shot {
         super(2.5, 100, -1, -1);
         this.accum = 0;
         this.step = false;
-        this.timer = new Timer(2, function() {
+        this.timer = new Timer(2, function () {
             this.accum = 0;
         }.bind(this), false);
     }
@@ -21,7 +21,7 @@ export const ShotBeam = class extends Shot {
         if (this.fired) {
             if (this.timer.done) {
                 this.setPos(data['player'].right + (this.right - this.left >> 1),
-                            data['player'].y + 18);
+                    data['player'].y + 18);
                 this.setBounds(CANVAS_BASE_WIDTH - this.left, this.accum);
                 if (!this.step) {
                     this.accum += 7;
@@ -52,13 +52,13 @@ export const ShotBeam = class extends Shot {
         if (this.fired) {
             if (this.timer.done) {
                 context.drawImage(ShotBeam.imgs[0], this.left, this.y - (this.bot - this.top >> 1),
-                                  ShotBeam.imgs[0].width, this.bot - this.top);
+                    ShotBeam.imgs[0].width, this.bot - this.top);
                 context.drawImage(ShotBeam.imgs[1], this.left + ShotBeam.imgs[0].width, this.y - (this.bot - this.top >> 1),
-                                  this.right - this.left, this.bot - this.top);
+                    this.right - this.left, this.bot - this.top);
             }
             else {
                 if (this.accum & 0x2)
-                    context.drawImage(ShotBeam.imgs[2], this.x - (ShotBeam.imgs[2].width >> 1), this.y - (ShotBeam.imgs[2].height >> 1));                
+                    context.drawImage(ShotBeam.imgs[2], this.x - (ShotBeam.imgs[2].width >> 1), this.y - (ShotBeam.imgs[2].height >> 1));
             }
             /* debug - draw beam collision bounds */
             // context.save();

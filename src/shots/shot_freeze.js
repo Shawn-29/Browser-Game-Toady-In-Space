@@ -1,11 +1,11 @@
-import {Rect} from '../rect.js';
-import {Shot} from './shot_base.js';
-import {TileMgr, checkTileBits, TILE_TYPES} from '../tile_mgr.js';
-import {Timer} from '../timer.js';
+import { Rect } from '../rect.js';
+import { Shot } from './shot_base.js';
+import { TileMgr, checkTileBits, TILE_TYPES } from '../tile_mgr.js';
+import { Timer } from '../timer.js';
 
-import {drawImgR, getImg, randInt} from '../utilities.js';
+import { drawImgR, getImg, randInt } from '../utilities.js';
 
-import {BASE_MOVE_VEL, CANVAS_BASE_WIDTH} from '../gameplay_constants.js';
+import { BASE_MOVE_VEL, CANVAS_BASE_WIDTH } from '../gameplay_constants.js';
 
 export const ShotFreeze = class extends Shot {
     constructor() {
@@ -74,17 +74,17 @@ export const ShotFreeze = class extends Shot {
             const xM = this.vel[0] * dt,
                 yM = this.vel[1] * dt,
                 xOffset = data['gameXPos'],
-                rt = TileMgr.get().getPointTileType(this.x + xOffset + xM, this.top + yM),
-                rb = TileMgr.get().getPointTileType(this.x + xOffset + xM, this.bot + yM),
+                rt = TileMgr.getPointTileType(this.x + xOffset + xM, this.top + yM),
+                rb = TileMgr.getPointTileType(this.x + xOffset + xM, this.bot + yM),
                 result = checkTileBits(rt, rb);
-            
+
             if (result & TILE_TYPES['TILE_WALL']) {
                 this.fired = false;
             }
             else {
                 /* check if the projectile hit an enemy */
                 for (const e of data['enemyList']) {
-                    if (e.collCheck(this, xOffset) && e.setHp(ShotFreeze.power, data, false)) {                            
+                    if (e.collCheck(this, xOffset) && e.setHp(ShotFreeze.power, data, false)) {
                         this.fired = false;
 
                         if (e.done) {
@@ -147,7 +147,7 @@ const IceCube = class {
                 this.bounds.x - xOffset - (this.bounds.width >>> 1),
                 this.bounds.y - (this.bounds.height >>> 1),
                 this.bounds.width,
-                this.bounds.height                
+                this.bounds.height
             );
             return;
         }
@@ -175,10 +175,10 @@ const IceCube = class {
         const xOffset = data['gameXPos'],
             xM = this.xVel * dt;
 
-        const rt = TileMgr.get().getPointTileType(this.bounds.x + xM, this.bounds.y),
-            rb = TileMgr.get().getPointTileType(this.bounds.x + xM, this.bounds.y),
+        const rt = TileMgr.getPointTileType(this.bounds.x + xM, this.bounds.y),
+            rb = TileMgr.getPointTileType(this.bounds.x + xM, this.bounds.y),
             result = checkTileBits(rt, rb);
-    
+
         /* check if the cube hit a wall or went off screen */
         if (result & TILE_TYPES['TILE_WALL']) {
             this.shatter();

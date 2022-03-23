@@ -1,9 +1,9 @@
-import {Shot} from './shot_base.js';
-import {TileMgr, checkTileBits, TILE_TYPES} from '../tile_mgr.js';
+import { Shot } from './shot_base.js';
+import { TileMgr, checkTileBits, TILE_TYPES } from '../tile_mgr.js';
 
-import {getImg} from '../utilities.js';
+import { getImg } from '../utilities.js';
 
-import {BASE_MOVE_VEL, CANVAS_BASE_WIDTH} from '../gameplay_constants.js';
+import { BASE_MOVE_VEL, CANVAS_BASE_WIDTH } from '../gameplay_constants.js';
 
 export const ShotRegular = class extends Shot {
     constructor() {
@@ -12,32 +12,32 @@ export const ShotRegular = class extends Shot {
     }
     update(dt, data = null) {
         if (this.fired) {
-            
+
             const xM = this.vel[0] * dt;
-            
+
             if (this.left >= CANVAS_BASE_WIDTH) {
                 this.fired = false;
             }
             else {
                 const xOffset = data['gameXPos'],
-                    rt = TileMgr.get().getPointTileType(this.x + xOffset + xM, this.top),
-                    rb = TileMgr.get().getPointTileType(this.x + xOffset + xM, this.bot),
+                    rt = TileMgr.getPointTileType(this.x + xOffset + xM, this.top),
+                    rb = TileMgr.getPointTileType(this.x + xOffset + xM, this.bot),
                     result = checkTileBits(rt, rb);
-                    
+
                 if (result & TILE_TYPES['TILE_WALL']) {
                     this.fired = false;
                 }
                 else {
                     /* check if the projectile hit an enemy */
                     for (const e of data['enemyList']) {
-                        if (e.collCheck(this, xOffset) && e.setHp(ShotRegular.power, data)) {                            
+                        if (e.collCheck(this, xOffset) && e.setHp(ShotRegular.power, data)) {
                             this.fired = false;
                             break;
                         }
                     }
                 }
             }
-            
+
             this.move(xM, 0);
         }
     }

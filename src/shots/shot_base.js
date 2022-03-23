@@ -1,4 +1,4 @@
-import {Rect} from '../rect.js';
+import { Rect } from '../rect.js';
 
 export const Shot = class extends Rect {
     constructor(width, height, x = 0, y = 0) {

@@ -1,19 +1,19 @@
-import {ShotRegular} from './shot_regular.js';
-import {ShotLazer} from './shot_lazer.js';
-import {ShotFireWave} from './shot_fire_wave.js';
-import {ShotCutter} from './shot_cutter.js';
-import {ShotDrill} from './shot_drill.js';
-import {ShotBall} from './shot_ball.js';
-import {ShotBeam} from './shot_beam.js';
-import {ShotFreeze} from './shot_freeze.js';
-import {Timer} from '../timer.js';
+import { ShotRegular } from './shot_regular.js';
+import { ShotLazer } from './shot_lazer.js';
+import { ShotFireWave } from './shot_fire_wave.js';
+import { ShotCutter } from './shot_cutter.js';
+import { ShotDrill } from './shot_drill.js';
+import { ShotBall } from './shot_ball.js';
+import { ShotBeam } from './shot_beam.js';
+import { ShotFreeze } from './shot_freeze.js';
+import { Timer } from '../timer.js';
 
 export const ShotCollection = class {
     constructor(shotType) {
         this.timer = new Timer(0.0, null, false);
         this.shots = [];
         this.imgIcon = null;
-        
+
         switch (shotType) {
             default:
             case 'ShotRegular':
@@ -72,7 +72,7 @@ export const ShotCollection = class {
     }
     update(dt, data = null) {
         this.timer.update(dt, data);
-        
+
         for (const shot of this.shots) {
             shot.update(dt, data);
         }
@@ -80,12 +80,12 @@ export const ShotCollection = class {
     draw(context, xOffset = 0) {
         for (const shot of this.shots) {
             shot.draw(context, xOffset);
-        }        
+        }
     }
     reset() {
         for (const shot of this.shots) {
             shot.fired = false;
-        }           
+        }
     }
     fire(x, y) {
         for (const shot of this.shots) {
