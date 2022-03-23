@@ -1,6 +1,6 @@
-import {Button} from './button.js';
+import { Button } from './button.js';
 
-import {getImg} from '../utilities.js';
+import { getImg } from '../utilities.js';
 
 export const ImgButton = class extends Button {
     constructor(filename, clickFn, width, height, x = 0, y = 0, upFn = null) {

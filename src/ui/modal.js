@@ -1,6 +1,6 @@
-import {ImgButton} from './img_button.js';
+import { ImgButton } from './img_button.js';
 
-import {CANVAS_BASE_HEIGHT, CANVAS_BASE_WIDTH} from '../gameplay_constants.js';
+import { CANVAS_BASE_HEIGHT, CANVAS_BASE_WIDTH } from '../gameplay_constants.js';
 
 export const Modal = class {
     constructor(msg, ...btns) {
