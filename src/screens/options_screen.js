@@ -27,8 +27,7 @@ export const OptionsScreen = class {
         this.reward = {};
 
         const saver = GameSaver;
-        this.canSave = saver.isEnabled();
-        this.showSaveWarning = !this.canSave;
+        this.showSaveWarning = !saver.isEnabled;
         this.saveWarnBtn = new ImgButton(
             './images/ui/ResumeBtn.png',
             function () {
@@ -39,7 +38,7 @@ export const OptionsScreen = class {
             CANVAS_BASE_HEIGHT - 66 - 70
         );
 
-        if (saver.isEnabled()) {
+        if (saver.isEnabled) {
             /* create default user data if it doesn't exist */
             if (!saver.getValue('userData')) {
                 saver.saveValue('userData', UserMgr.getStringJSON());
@@ -220,7 +219,7 @@ export const OptionsScreen = class {
             drawTextWrap(context,
                 'Your browser is preventing this game from saving data. ' +
                 'All progress will be lost when the browser closes. ' +
-                'To fix this issue, try enabling cookies or updating the browser to the latest version.',
+                'To fix this issue, try enabling cookies or updating your browser to the latest version.',
                 textX, 100, CANVAS_BASE_WIDTH, 20
             );
             drawThemeText(context, 'WARNING!', textX, 40);
