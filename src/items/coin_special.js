@@ -1,9 +1,9 @@
-import {Item} from './item_base.js';
-import {CoinG} from './coin_green.js';
+import { Item } from './item_base.js';
+import { CoinG } from './coin_green.js';
 
-import {getImg} from '../utilities.js';
+import { getImg } from '../utilities.js';
 
-import {SCORE_SHEET} from '../score_sheet.js';
+import { SCORE_SHEET } from '../score_sheet.js';
 
 export const CoinS = class extends Item {
     constructor(x, y) {
@@ -19,8 +19,8 @@ export const CoinS = class extends Item {
     }
     draw(context, xOffset = 0) {
         context.drawImage(CoinS.imgs[CoinG.animIndex],
-                         this.x - xOffset - CoinS.imgs[CoinG.animIndex].width * 0.5,
-                         this.y - CoinS.imgs[CoinG.animIndex].height * 0.5);        
+            this.x - xOffset - CoinS.imgs[CoinG.animIndex].width * 0.5,
+            this.y - CoinS.imgs[CoinG.animIndex].height * 0.5);
     }
 };
 CoinS.imgs = [

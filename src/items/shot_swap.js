@@ -1,7 +1,7 @@
-import {Item} from './item_base.js';
-import {Timer} from '../timer.js';
+import { Item } from './item_base.js';
+import { Timer } from '../timer.js';
 
-import {drawHitFrame, getImg} from '../utilities.js';
+import { drawHitFrame, getImg } from '../utilities.js';
 
 export const ShotSwap = class extends Item {
     constructor(x, y) {
@@ -18,7 +18,7 @@ export const ShotSwap = class extends Item {
                 case 4: data['player'].setShotType('ShotFreeze'); break;
             }
             this.done = true;
-        }         
+        }
     }
     draw(context, xOffset = 0) {
         if (ShotSwap.blink) {
@@ -26,8 +26,8 @@ export const ShotSwap = class extends Item {
         }
         else {
             context.drawImage(ShotSwap.imgs[ShotSwap.animIndex],
-                                 this.x - xOffset - ShotSwap.imgs[ShotSwap.animIndex].width * 0.5,
-                                 this.y - ShotSwap.imgs[ShotSwap.animIndex].height * 0.5);
+                this.x - xOffset - ShotSwap.imgs[ShotSwap.animIndex].width * 0.5,
+                this.y - ShotSwap.imgs[ShotSwap.animIndex].height * 0.5);
         }
     }
 };

@@ -1,4 +1,4 @@
-import {Rect} from '../rect.js';
+import { Rect } from '../rect.js';
 
 export const Item = class extends Rect {
     constructor(width, height, x, y) {

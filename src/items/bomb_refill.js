@@ -1,7 +1,7 @@
-import {Item} from './item_base.js';
-import {ShotSwap} from './shot_swap.js';
+import { Item } from './item_base.js';
+import { ShotSwap } from './shot_swap.js';
 
-import {drawHitFrame, getImg} from '../utilities.js';
+import { drawHitFrame, getImg } from '../utilities.js';
 
 export const BombRefill = class extends Item {
     constructor(x, y) {
@@ -20,8 +20,8 @@ export const BombRefill = class extends Item {
         }
         else {
             context.drawImage(BombRefill.img,
-                             this.x - xOffset - BombRefill.img.width * 0.5,
-                             this.y - BombRefill.img.height * 0.5);
+                this.x - xOffset - BombRefill.img.width * 0.5,
+                this.y - BombRefill.img.height * 0.5);
         }
     }
 };
