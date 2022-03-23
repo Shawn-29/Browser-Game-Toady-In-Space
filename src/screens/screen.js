@@ -1,8 +1,8 @@
-import {Enemy} from '../enemies/base_enemy.js';
-import {Item} from '../items/item_base.js';
-import {Rect} from '../rect.js';
+import { Enemy } from '../enemies/base_enemy.js';
+import { Item } from '../items/item_base.js';
+import { Rect } from '../rect.js';
 
-import {Lava} from '../enemies/lava.js';
+import { Lava } from '../enemies/lava.js';
 
 export const Screen = class extends Rect {
     constructor(width, height, x = 0, y = 0) {

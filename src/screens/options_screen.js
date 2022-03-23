@@ -1,10 +1,17 @@
-import {BarcodeMgr} from '../barcode_scanner/video.js';
-import {DataButton} from '../ui/data_button.js';
-import {ImgButton} from '../ui/img_button.js';
-import {Modal} from '../ui/modal.js';
-import {UserMgr} from '../user/user_mgr.js';
+import { BarcodeMgr } from '../barcode_scanner/video.js';
+import { DataButton } from '../ui/data_button.js';
+import { ImgButton } from '../ui/img_button.js';
+import { Modal } from '../ui/modal.js';
+import { UserMgr } from '../user/user_mgr.js';
 
-import {getImg, getRandChoice} from '../utilities.js';
+import {
+    getImg,
+    getRandChoice,
+    drawTextWrap,
+    drawThemeText
+} from '../utilities.js';
+
+import { GameSaver } from '../game_saver.js';
 
 import {
     CANVAS_BASE_HEIGHT,
@@ -18,38 +25,55 @@ export const OptionsScreen = class {
     constructor(startGameFn) {
         this.startGameFn = startGameFn;
         this.reward = {};
-        if (localStorage) {
-            /* create default localStorage data if it doesn't exist */
-            if (!localStorage.userData) {
-                localStorage.userData = UserMgr.get().getStringJSON();
+
+        const saver = GameSaver;
+        this.canSave = saver.isEnabled();
+        this.showSaveWarning = !this.canSave;
+        this.saveWarnBtn = new ImgButton(
+            './images/ui/ResumeBtn.png',
+            function () {
+                this.showSaveWarning = false;
+            }.bind(this),
+            166, 66,
+            CANVAS_BASE_WIDTH >> 1,
+            CANVAS_BASE_HEIGHT - 66 - 70
+        );
+
+        if (saver.isEnabled()) {
+            /* create default user data if it doesn't exist */
+            if (!saver.getValue('userData')) {
+                saver.saveValue('userData', UserMgr.getStringJSON());
             }
             /* parse the local storage data if it exists and then store the parsed
                 data to be used by the game*/
             else {
-                let pathData = JSON.parse(localStorage.userData);
+                const pathData = JSON.parse(saver.getValue('userData'));
 
                 for (let i = 0; i < MAX_PATHS; ++i) {
-                    UserMgr.get().setData(i, pathData[i]);
+                    UserMgr.setData(i, pathData[i]);
                 }
             }
-            if (!localStorage.highScore)
-                localStorage.highScore = '000000';
-            UserMgr.get().setHighScore(localStorage.highScore);
+            /* set the intial high score if it doesn't exist */
+            if (!saver.getValue('highScore')) {
+                saver.saveValue('highScore', '000000');
+            }
+
+            UserMgr.setHighScore(saver.getValue('highScore'));
         }
-        
+
         this.img = getImg('./images/ui/OptionsScreen.png');
-        
+
         this.modal = new Modal(
             'Delete Game?',
             new ImgButton(
                 './images/ui/NoBtn.png',
-                function() { this.modal.hidden = true; }.bind(this),
+                function () { this.modal.hidden = true; }.bind(this),
                 110, 66,
                 CANVAS_BASE_WIDTH * 0.35, 170
             ),
             new ImgButton(
                 './images/ui/YesBtn.png',
-                function() {
+                function () {
                     this.modal.hidden = true;
                     this.clearGame();
                 }.bind(this),
@@ -61,7 +85,7 @@ export const OptionsScreen = class {
             '',
             new ImgButton(
                 './images/ui/AwesomeBtn.png',
-                function() {
+                function () {
                     this.secretModal.hidden = true;
 
                     if (this.reward.randomLevelCode !== '') {
@@ -72,22 +96,22 @@ export const OptionsScreen = class {
                 CANVAS_BASE_WIDTH >> 1, 170
             )
         );
-        
+
         this.btns = [
-            new DataButton(this.setActiveBtn.bind(this), UserMgr.get().getData(0), 556, 60, 323, 100),
-            new DataButton(this.setActiveBtn.bind(this), UserMgr.get().getData(1), 556, 60, 323, 170),
-            new DataButton(this.setActiveBtn.bind(this), UserMgr.get().getData(2), 556, 60, 323, 240),
-            new ImgButton('./images/ui/StartBtn.png', function() {
+            new DataButton(this.setActiveBtn.bind(this), UserMgr.getData(0), 556, 60, 323, 100),
+            new DataButton(this.setActiveBtn.bind(this), UserMgr.getData(1), 556, 60, 323, 170),
+            new DataButton(this.setActiveBtn.bind(this), UserMgr.getData(2), 556, 60, 323, 240),
+            new ImgButton('./images/ui/StartBtn.png', function () {
                 this.startGame();
             }.bind(this), 280, 66, 170, 320),
-            new ImgButton('./images/ui/DeleteBtn.png', function() { this.modal.hidden = false }.bind(this), 280, 66, 472, 320),
+            new ImgButton('./images/ui/DeleteBtn.png', function () { this.modal.hidden = false }.bind(this), 280, 66, 472, 320),
             new ImgButton('./images/ui/BarcodeBtn.png', this.startScan.bind(this), 80, 40, 548, 31)
         ];
 
         this.setActiveBtn(this.btns[0]);
-        
+
         this.hidden = false;
-        this.cameraDoneFn = function() {
+        this.cameraDoneFn = function () {
 
             self.removeEventListener('cameradone', this.cameraDoneFn, false);
 
@@ -97,7 +121,7 @@ export const OptionsScreen = class {
             /* option screen can receive input again */
             this.hidden = false;
 
-            const barcode_result = BarcodeMgr.get().getBarcode();
+            const barcode_result = BarcodeMgr.getBarcode();
 
             /* check if the barcode was read */
             if (barcode_result.length > 0) {
@@ -106,7 +130,7 @@ export const OptionsScreen = class {
 
                 let levelAwarded = false;
 
-                this.reward = {secretShot: '', randomLevelCode: '', msg: ''};
+                this.reward = { secretShot: '', randomLevelCode: '', msg: '' };
 
                 /* award a randomly generated level based on the digit to the left
                     or right of the middle digit */
@@ -149,29 +173,29 @@ export const OptionsScreen = class {
                     }
 
                     /* store the secret shot type so the user can begin a new game path with it */
-                    UserMgr.get().getData().shotType = this.reward.secretShot;
+                    UserMgr.getData().shotType = this.reward.secretShot;
 
-                    this.activeBtn.setData(UserMgr.get().getData());
+                    this.activeBtn.setData(UserMgr.getData());
 
                     /* write the awarded shot type to the current path */
-                    localStorage.userData = UserMgr.get().getStringJSON();
+                    GameSaver.saveValue('userData', UserMgr.getStringJSON());
                 }
 
                 this.secretModal.msg = this.reward.msg;
 
                 /* display the reward to the player */
                 this.secretModal.hidden = false;
-               
+
                 /* reset the barcode; user must scan a barcode again to
                     be awarded with another secret reward */
-                BarcodeMgr.get().resetBarcode();
-            }          
+                BarcodeMgr.resetBarcode();
+            }
         }.bind(this);
     }
     startScan() {
         this.hidden = true;
         document.getElementById('game-canvas').style.display = 'none';
-        BarcodeMgr.get().showCamera();
+        BarcodeMgr.showCamera();
         self.addEventListener('cameradone', this.cameraDoneFn, false);
     }
     startGame() {
@@ -184,29 +208,55 @@ export const OptionsScreen = class {
         return;
     }
     draw(context) {
+
+        if (this.showSaveWarning) {
+            const textX = CANVAS_BASE_WIDTH >> 1;
+            context.save();
+            context.fillStyle = `#000`;
+            context.fillRect(0, 0, CANVAS_BASE_WIDTH, CANVAS_BASE_HEIGHT);
+            context.fillStyle = '#ef0';
+            context.textAlign = 'center';
+            context.font = '18px consolas';
+            drawTextWrap(context,
+                'Your browser is preventing this game from saving data. ' +
+                'All progress will be lost when the browser closes. ' +
+                'To fix this issue, try enabling cookies or updating the browser to the latest version.',
+                textX, 100, CANVAS_BASE_WIDTH, 20
+            );
+            drawThemeText(context, 'WARNING!', textX, 40);
+            context.restore();
+            this.saveWarnBtn.draw(context);
+            return;
+        }
+
         context.drawImage(this.img, 0, 0);
-        
+
         for (let btn of this.btns) {
             btn.draw(context)
         }
-        
+
         this.modal.draw(context);
         this.secretModal.draw(context);
-        
+
         context.save();
         context.fillStyle = '#ef0';
         context.font = '28px consolas';
         context.textAlign = 'center';
         context.fillText('HIGH', 76, 24, 140);
-        context.fillText(UserMgr.get().getHighScore(), 76, 50, 140);
+        context.fillText(UserMgr.getHighScore(), 76, 50, 140);
         context.restore();
     }
     mouseDown(e) {
         if (this.hidden)
             return;
-        
+
         let xOffset = (e.pageX - window.newGameX) * (CANVAS_BASE_WIDTH / window.newGameWidth),
             yOffset = (e.pageY - window.newGameY) * (CANVAS_BASE_HEIGHT / window.newGameHeight);
+
+        if (this.showSaveWarning) {
+            this.saveWarnBtn.checkPoint(xOffset, yOffset);
+            return;
+        }
 
         if (this.secretModal.hidden) {
             if (this.modal.hidden) {
@@ -218,10 +268,10 @@ export const OptionsScreen = class {
             }
             else {
                 this.modal.checkPoint(xOffset, yOffset);
-            }           
+            }
         }
         else {
-            this.secretModal.checkPoint(xOffset, yOffset);           
+            this.secretModal.checkPoint(xOffset, yOffset);
         }
     }
     setActiveBtn(btn) {
@@ -230,15 +280,15 @@ export const OptionsScreen = class {
         }
         this.activeBtn = btn;
         this.activeBtn.fillClr = '#262f8a';
-        UserMgr.get().setActiveUser(this.btns.indexOf(this.activeBtn));
+        UserMgr.setActiveUser(this.btns.indexOf(this.activeBtn));
     }
     clearGame() {
-        const activeInd = UserMgr.get().getActiveInd();
-        
-        UserMgr.get().clearData(activeInd);
-        
-        this.activeBtn.setData(UserMgr.get().getData(activeInd));
-        
-        localStorage.userData = UserMgr.get().getStringJSON();
+        const activeInd = UserMgr.getActiveInd();
+
+        UserMgr.clearData(activeInd);
+
+        this.activeBtn.setData(UserMgr.getData(activeInd));
+
+        GameSaver.saveValue('userData', UserMgr.getStringJSON());
     }
 };
