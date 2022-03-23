@@ -9,7 +9,7 @@ You can play the game [here](https://shawn-29.github.io/Browser-Game-Toady-In-Sp
 ## Features
 
 - Five levels of fun including a final boss battle!
-- Seven different shot types with their own unique strengths!
+- Eight different shot types with their own unique strengths!
 - Battle a variety of enemies, from simple Philbert birds to devious Vector Toads!
 - Scan actual barcodes to receive in-game powerups or play randomly generated levels!
 
