@@ -1,10 +1,7 @@
-import {TILE_SIZE} from './tile_mgr.js';
-
 export const BASE_MOVE_VEL = 300,
     CANVAS_BASE_WIDTH = 640,
     CANVAS_BASE_HEIGHT = 360,
     DASH_BOOST = 4,
-    LEVEL_HEIGHT = CANVAS_BASE_HEIGHT - TILE_SIZE,
     WALL_DMG = 25,
     HAZARD_DMG = 35,
     MAX_SCORE_DIGITS = 6,

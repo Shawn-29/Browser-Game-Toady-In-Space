@@ -62,6 +62,7 @@ const filesToCache = [
   './tile_mgr.js',
   './timer.js',
   './utilities.js',
+  './game_saver.js',
   '../images/ui/BarcodeBtn.png',
   '../images/shots/BombA.png',
   '../images/shots/BombB.png',
@@ -203,7 +204,7 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-  const dataUrl = 'https://shawn-29.github.io/Progressive-Web-App/';
+  const dataUrl = 'https://shawn-29.github.io/Browser-Game-Toady-In-Space/';
   if (e.request.url.indexOf(dataUrl) > -1) {
     e.respondWith(
       caches.open(dataCacheName).then(async (cache) => {

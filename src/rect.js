@@ -38,16 +38,16 @@ export const Rect = class {
     }
     collCheck(rect, xOffset = 0) {
         const adjRect = new Rect(this.right - this.left, this.bot - this.top,
-                      this.x + xOffset, this.y);
+            this.x + xOffset, this.y);
         return (((adjRect.left >= rect.left && adjRect.left <= rect.right) ||
-               (adjRect.right >= rect.left && adjRect.right <= rect.right) || (adjRect.x >= rect.left && adjRect.x <= rect.right)) &&
-               ((adjRect.top >= rect.top && adjRect.top <= rect.bot) ||
+            (adjRect.right >= rect.left && adjRect.right <= rect.right) || (adjRect.x >= rect.left && adjRect.x <= rect.right)) &&
+            ((adjRect.top >= rect.top && adjRect.top <= rect.bot) ||
                 (adjRect.bot >= rect.top && adjRect.bot <= rect.bot) ||
-               (adjRect.y >= rect.top && adjRect.y <= rect.bot)))
+                (adjRect.y >= rect.top && adjRect.y <= rect.bot)))
     }
     static checkPoint(x, y, rect, xOffset = 0) {
         return x >= rect.left + xOffset && x <= rect.right + xOffset &&
-               y >= rect.top && y <= rect.bot;
+            y >= rect.top && y <= rect.bot;
     }
     static checkPointsAgainst(rect, other, xOffset = 0) {
         return Rect.checkPoint(rect.x, rect.y, other, xOffset) ||

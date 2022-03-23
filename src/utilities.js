@@ -1,4 +1,4 @@
-import {RAD_2_DEGS} from './gameplay_constants.js';
+import { RAD_2_DEGS } from './gameplay_constants.js';
 
 export const drawHitFrame = (context, enemy, img, xOffset = 0) => {
     const bufferCanvas = document.getElementById("buffer"),
@@ -72,3 +72,38 @@ export const randBool = () => Math.random() >= .5;
 export const randDouble = (min, max) => { return Math.random() * (max - min + 1) + min; };
 
 export const randInt = (min, max) => { return ~~(Math.random() * (max - min + 1)) + min; };
+
+export const drawTextWrap = (context, text, x, y, maxWidth, lineHeight) => {
+    const words = text.split(' ');
+    let line = '';
+
+    for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = context.measureText(testLine);
+        const testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+            context.fillText(line, x, y);
+            line = words[n] + ' ';
+            y += lineHeight;
+        }
+        else {
+            line = testLine;
+        }
+    }
+    context.fillText(line, x, y);
+};
+
+export const drawThemeText = (context, msg, x, y, size = '40px', font = 'Cooper Black') => {
+    context.save();
+    context.shadowColor = '#060';
+    context.shadowOffsetX = 0;
+    context.shadowOffsetY = 4;
+    context.lineWidth = 2;
+    context.strokeStyle = '#060';
+    context.fillStyle = '#ae0';
+    context.textAlign = "center";
+    context.font = `${size} ${font}`;
+    context.strokeText(msg, x, y);
+    context.fillText(msg, x, y + 4);
+    context.restore();
+};

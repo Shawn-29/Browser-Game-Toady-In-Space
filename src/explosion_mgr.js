@@ -1,6 +1,6 @@
-import {Timer} from './timer.js';
+import { Timer } from './timer.js';
 
-import {getImg} from './utilities.js';
+import { getImg } from './utilities.js';
 
 export const Explosion = class {
     constructor(x, y) {
@@ -8,7 +8,7 @@ export const Explosion = class {
         this.y = y;
         this.animIndex = 0;
         this.done = false;
-        this.timer = new Timer(.075, function() {
+        this.timer = new Timer(.075, function () {
             if (++this.animIndex >= Explosion.imgs.length) {
                 this.done = true;
             }
@@ -35,38 +35,27 @@ Explosion.imgs = [
     getImg('./images/enemies/Exp3.png')
 ];
 
-export const ExpMgr = (function() {
-    let instance = null;
-    const createInstance = () => {
-        const EM_exps = [];
-        return {
-            addExp(x, y) {
-                EM_exps.push(new Explosion(x, y));
-            },
-            update(dt, data = null) {
-                for (const e of EM_exps) {
-                    e.update(dt, data);
-                    if (e.done) {
-                        EM_exps.shift();
-                    }
+export const ExpMgr = (() => {
+    const EM_exps = [];
+    return Object.freeze({
+        addExp(x, y) {
+            EM_exps.push(new Explosion(x, y));
+        },
+        update(dt, data = null) {
+            for (const e of EM_exps) {
+                e.update(dt, data);
+                if (e.done) {
+                    EM_exps.shift();
                 }
-            },
-            draw(context, xOffset = 0) {
-                for (const e of EM_exps) {
-                    e.draw(context, xOffset);
-                }
-            },
-            reset() {
-                EM_exps.length = 0;
             }
-        };
-    };
-    return {
-        get() {
-            if (!instance) {
-                instance = createInstance();
+        },
+        draw(context, xOffset = 0) {
+            for (const e of EM_exps) {
+                e.draw(context, xOffset);
             }
-            return instance;
+        },
+        reset() {
+            EM_exps.length = 0;
         }
-    };
+    });
 })();

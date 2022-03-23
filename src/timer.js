@@ -1,4 +1,4 @@
-import {getTimestamp} from './utilities.js';
+import { getTimestamp } from './utilities.js';
 
 export const Timer = class {
     constructor(dur, callback = null, repeat = true) {
@@ -20,7 +20,7 @@ export const Timer = class {
     update(dt, data = null) {
         if (this.started && !this.done) {
             this.curTime += dt;
-            
+
             if (this.curTime >= this.endTime) {
                 this.done = true;
                 this.started = false;
