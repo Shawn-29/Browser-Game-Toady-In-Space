@@ -1,4 +1,4 @@
-# Progressive Web App - Toady In Space
+# Browser Game - Progressive Web App - Toady In Space
 
 In this thrilling horizontal arcade shooter, Toady pilots his signature spacecraft through the perils of outer space! During the journey, Toady will acquire awesome powerups, like the extra toasty toad flamethrower or the magical toad boomerang which snags items from a distance. And if those aren't enough, Toady's ship is equipped with a limited supply of frog pie bombs for explosive action! Can you aquire the mystical toad coins and complete the mission? Toady is counting on you!
 
