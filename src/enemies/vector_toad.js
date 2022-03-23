@@ -1,10 +1,12 @@
-import {Enemy} from './base_enemy.js';
-import {Shot} from '../shots/shot_base.js';
-import {Timer} from '../timer.js';
+import { Enemy } from './base_enemy.js';
+import { Shot } from '../shots/shot_base.js';
+import { Timer } from '../timer.js';
 
-import {drawHitFrame, getImg} from '../utilities.js';
+import { drawHitFrame, getImg } from '../utilities.js';
 
-import {BASE_MOVE_VEL, LEVEL_HEIGHT, RAD_2_DEGS} from '../gameplay_constants.js';
+import { BASE_MOVE_VEL, RAD_2_DEGS } from '../gameplay_constants.js';
+
+import { LEVEL_HEIGHT } from '../tile_mgr.js';
 
 export class VectorToad extends Enemy {
     constructor(x, y) {
@@ -13,12 +15,12 @@ export class VectorToad extends Enemy {
         this.shot.vel[0] = -BASE_MOVE_VEL * 1.5;
         this.shotDelay = new Timer(1, null, false);
         this.shotDelay.start();
-        
+
         this.ang = 0;
     }
     update(dt, data = null) {
         super.update(dt, data);
-        
+
         this.shotDelay.update(dt);
         if (this.shotDelay.done) {
             if (!this.shot.fired) {
@@ -31,10 +33,10 @@ export class VectorToad extends Enemy {
             this.shot.fired = false;
         }
         this.shot.update(dt);
-        
+
         let xM = 0,
             yM = 0;
-        
+
         if (this.top <= data['player'].top - 50) {
             yM = VectorToad.vel;
         }
@@ -49,37 +51,37 @@ export class VectorToad extends Enemy {
             xM = Math.sin((RAD_2_DEGS * this.ang)) * VectorToad.vel;
             yM = Math.cos((RAD_2_DEGS * this.ang)) * VectorToad.vel * 1;
         }
-        
+
         if (this.top + yM <= 0) {
             yM = -this.top;
         }
         else if (this.bot + yM >= LEVEL_HEIGHT) {
             yM = LEVEL_HEIGHT - this.bot;
         }
-        
+
         this.move((xM - 5) * dt, yM * dt);
-        
+
         if (data['player'].collCheck(this.shot, data['gameXPos'])) {
             data['player'].setHp(20);
             this.shot.fired = false;
         }
         else if (data['player'].collCheck(this.shot, data['gameXPos'])) {
-            data['player'].setHp(20);            
+            data['player'].setHp(20);
         }
     }
     draw(context, xOffset = 0) {
         if (this.shot.fired)
             context.drawImage(VectorToad.imgShot,
-                              this.shot.x - xOffset - VectorToad.imgShot.width * 0.5,
-                              this.shot.y - VectorToad.imgShot.height * 0.5);
-        
+                this.shot.x - xOffset - VectorToad.imgShot.width * 0.5,
+                this.shot.y - VectorToad.imgShot.height * 0.5);
+
         if (this.blinkTimer.started) {
             drawHitFrame(context, this, VectorToad.img, xOffset);
         }
         else {
             context.drawImage(VectorToad.img,
-                             this.x - xOffset - VectorToad.img.width * 0.5,
-                             this.y - VectorToad.img.height * 0.5);
+                this.x - xOffset - VectorToad.img.width * 0.5,
+                this.y - VectorToad.img.height * 0.5);
         }
     }
     getImg() {

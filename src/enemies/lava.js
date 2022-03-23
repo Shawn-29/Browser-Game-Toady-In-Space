@@ -1,10 +1,10 @@
-import {Rect} from '../rect.js';
-import {Timer} from '../timer.js';
+import { Rect } from '../rect.js';
+import { Timer } from '../timer.js';
 
-import {getImg} from '../utilities.js';
+import { getImg } from '../utilities.js';
 
-import {HAZARD_DMG, LEVEL_HEIGHT} from '../gameplay_constants.js';
-import {TILE_SIZE} from '../tile_mgr.js';
+import { HAZARD_DMG } from '../gameplay_constants.js';
+import { TILE_SIZE, LEVEL_HEIGHT } from '../tile_mgr.js';
 
 export const Lava = class {
     constructor(x, dir = -1) {
@@ -12,7 +12,7 @@ export const Lava = class {
         this.dir = dir < 0 ? -1 : 1;
         this.accum = 0;
         this.sheets = [];
-        this.eruptTimer = new Timer(3.0, function() {
+        this.eruptTimer = new Timer(3.0, function () {
             this.reset();
             this.accum = 0;
         }.bind(this), false);
@@ -53,8 +53,8 @@ export const Lava = class {
     draw(context, xOffset = 0) {
         for (let s of this.sheets) {
             context.drawImage(Lava.imgs[Lava.animIndex],
-                             s.x - xOffset - (Lava.imgs[0].width >> 1),
-                             s.y - (Lava.imgs[0].height >> 1));
+                s.x - xOffset - (Lava.imgs[0].width >> 1),
+                s.y - (Lava.imgs[0].height >> 1));
         }
     }
     collCheck() {
@@ -69,7 +69,7 @@ export const Lava = class {
         else {
             for (let i = 0, len = this.sheets.length; i < len; ++i) {
                 this.sheets[i].setPos(this.sheets[0].x, 0 - (Lava.imgs[0].height - 22) * i);
-            }           
+            }
         }
     }
 };
@@ -81,7 +81,7 @@ Lava.imgs = [
 ];
 
 Lava.animIndex = 0;
-Lava.animTimer = new Timer(.05, function() {
+Lava.animTimer = new Timer(.05, function () {
     if (++Lava.animIndex >= Lava.imgs.length)
         Lava.animIndex = 0;
 }, true);

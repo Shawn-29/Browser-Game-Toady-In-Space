@@ -1,7 +1,7 @@
-import {Rect} from '../rect.js';
-import {Timer} from '../timer.js';
-import {ExpMgr} from '../explosion_mgr.js';
-import {SCORE_SHEET} from '../score_sheet.js';
+import { Rect } from '../rect.js';
+import { Timer } from '../timer.js';
+import { ExpMgr } from '../explosion_mgr.js';
+import { SCORE_SHEET } from '../score_sheet.js';
 
 export class Enemy extends Rect {
     constructor(hp, width, height, x = 0, y = 0) {
@@ -29,7 +29,7 @@ export class Enemy extends Rect {
         this.hp -= amt;
         if (this.hp <= 0) {
             if (addExp) {
-                ExpMgr.get().addExp(this.x, this.y);
+                ExpMgr.addExp(this.x, this.y);
             }
             data['player'].tempScore += SCORE_SHEET[this.constructor.name];
             this.done = true;

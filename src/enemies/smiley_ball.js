@@ -1,10 +1,10 @@
-import {Enemy} from './base_enemy.js';
-import {ExpMgr} from '../explosion_mgr.js';
-import {TileMgr, checkTileBits} from '../tile_mgr.js';
+import { Enemy } from './base_enemy.js';
+import { ExpMgr } from '../explosion_mgr.js';
+import { TileMgr, checkTileBits, LEVEL_HEIGHT } from '../tile_mgr.js';
 
-import {getImg} from '../utilities.js';
+import { getImg } from '../utilities.js';
 
-import {BASE_MOVE_VEL, CANVAS_BASE_WIDTH, LEVEL_HEIGHT} from '../gameplay_constants.js';
+import { BASE_MOVE_VEL, CANVAS_BASE_WIDTH } from '../gameplay_constants.js';
 
 export const SmileyBall = class extends Enemy {
     constructor(x, y) {
@@ -42,12 +42,12 @@ export const SmileyBall = class extends Enemy {
         let rTileOffset = this.right + xM,
             lTileOffset = this.left + xM;
 
-        if (checkTileBits(TileMgr.get().getPointTileType(rTileOffset, this.top),
-                                  TileMgr.get().getPointTileType(rTileOffset, this.bot),
-                                  TileMgr.get().getPointTileType(rTileOffset, this.y),
-                                  TileMgr.get().getPointTileType(lTileOffset, this.top),
-                                  TileMgr.get().getPointTileType(lTileOffset, this.bot),
-                                  TileMgr.get().getPointTileType(lTileOffset, this.y)) & TILE_TYPES['TILE_WALL']) {
+        if (checkTileBits(TileMgr.getPointTileType(rTileOffset, this.top),
+            TileMgr.getPointTileType(rTileOffset, this.bot),
+            TileMgr.getPointTileType(rTileOffset, this.y),
+            TileMgr.getPointTileType(lTileOffset, this.top),
+            TileMgr.getPointTileType(lTileOffset, this.bot),
+            TileMgr.getPointTileType(lTileOffset, this.y)) & TILE_TYPES['TILE_WALL']) {
             this.reverseX();
             xM = ~~(this.vel[0] * dt);
         }
@@ -55,30 +55,30 @@ export const SmileyBall = class extends Enemy {
         rTileOffset += xM;
         lTileOffset += xM;
 
-        if (checkTileBits(TileMgr.get().getPointTileType(rTileOffset, this.top + yM),
-                                  TileMgr.get().getPointTileType(rTileOffset, this.bot + yM),
-                                  TileMgr.get().getPointTileType(lTileOffset, this.top + yM),
-                                  TileMgr.get().getPointTileType(lTileOffset, this.bot + yM)) & TILE_TYPES['TILE_WALL']) {
+        if (checkTileBits(TileMgr.getPointTileType(rTileOffset, this.top + yM),
+            TileMgr.getPointTileType(rTileOffset, this.bot + yM),
+            TileMgr.getPointTileType(lTileOffset, this.top + yM),
+            TileMgr.getPointTileType(lTileOffset, this.bot + yM)) & TILE_TYPES['TILE_WALL']) {
             this.reverseY();
             yM = ~~(this.vel[1] * dt);
         }
 
         if (this.hits > 30) {
-            ExpMgr.get().addExp(this.x - xOffset, this.y);
+            ExpMgr.addExp(this.x - xOffset, this.y);
             this.done = true;
             return;
         }
-        
+
         let p = data['player'];
         if (p.collCheck(this, xOffset)) {
             p.setHp(15 + this.hits);
             if ((this.x + xOffset > p.x && Math.sign(this.vel[0]) == -1) ||
-               ((this.x + xOffset <= p.x && Math.sign(this.vel[0]) == 1))) {
+                ((this.x + xOffset <= p.x && Math.sign(this.vel[0]) == 1))) {
                 this.reverseX();
                 xM = ~~(this.vel[0] * dt);
             }
             if ((this.y > p.x && Math.sign(this.vel[1]) == -1) ||
-               ((this.y <= p.x && Math.sign(this.vel[1]) == 1))) {
+                ((this.y <= p.x && Math.sign(this.vel[1]) == 1))) {
                 this.reverseY();
                 yM = ~~(this.vel[1] * dt);
             }
@@ -104,9 +104,9 @@ export const SmileyBall = class extends Enemy {
             context.fill();
             context.restore();
             context.drawImage(SmileyBall.img,
-                              this.x - xOffset - (SmileyBall.img.width >> 1),
-                              this.y - (SmileyBall.img.height >> 1));          
-        }       
+                this.x - xOffset - (SmileyBall.img.width >> 1),
+                this.y - (SmileyBall.img.height >> 1));
+        }
     }
     reverseX() {
         ++this.hits;

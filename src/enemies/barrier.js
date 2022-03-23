@@ -1,13 +1,13 @@
-import {Enemy} from './base_enemy.js';
+import { Enemy } from './base_enemy.js';
 
-import {LEVEL_HEIGHT} from '../gameplay_constants.js';
+import { LEVEL_HEIGHT } from '../tile_mgr.js';
 
 export const Barrier = class extends Enemy {
     constructor(x) {
         super(-1, 100, LEVEL_HEIGHT, x, LEVEL_HEIGHT >> 1);
         this.hueAccum = 0;
         this.step = false;
-        this.blinkTimer.start().callback = function() {
+        this.blinkTimer.start().callback = function () {
             if (!this.step) {
                 this.hueAccum += 25;
                 if (this.hueAccum > 255) {
@@ -31,7 +31,7 @@ export const Barrier = class extends Enemy {
         if (data['enemyList'].size <= 1) {
             this.done = true;
         }
-        
+
         if (data['player'].collCheck(this, data['gameXPos'])) {
             data['player'].setHp(1, true);
         }

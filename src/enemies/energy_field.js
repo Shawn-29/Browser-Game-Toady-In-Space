@@ -1,13 +1,13 @@
-import {Enemy} from './base_enemy.js';
+import { Enemy } from './base_enemy.js';
 
-import {TILE_SIZE} from '../tile_mgr.js';
+import { TILE_SIZE } from '../tile_mgr.js';
 
 export const EnergyField = class extends Enemy {
     constructor(x, y, numHTiles, numVTiles) {
         super(-1, TILE_SIZE * numHTiles, TILE_SIZE * numVTiles, x, y);
         this.hueAccum = 0;
         this.step = false;
-        this.blinkTimer.start().callback = function() {
+        this.blinkTimer.start().callback = function () {
             if (!this.step) {
                 this.hueAccum += 25;
                 if (this.hueAccum > 255) {
