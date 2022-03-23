@@ -13,27 +13,28 @@
     <script src='./src/main.js' type="module"></script>
 </head>
 <body>
-    <noscript><p>This game requires JavaScript to be enabled in your browser.</p></noscript>
+    <noscript>
+        This game requires JavaScript.
+        Please <a href="https://enable-javascript.com/" target="_blank"
+        rel="noopener noreferrer">enable JavaScript</a>,
+        then <a href="./">try again</a>.
+    </noscript>
     <div>
         <canvas id="game-canvas" width="640" height="360">
             This game requires a browser that supports the canvas tag.
         </canvas>
         <canvas id="buffer" width="640" height="360" style="display: none;"></canvas>
         <div id="camera-area" style="display: none;">
-            <div class="select">
-                <label for="video-source">Scanner: </label><select id="video-source"></select>
+            <div>
+                <div class='select-area'>
+                    <label for="video-source">Device: </label>
+                    <select id="video-source"></select>
+                </div>
                 <button class='btn' id='btn-scan'>Scan Barcode</button>
                 <button class='btn' id='btn-cancel-scan'>Cancel</button>
             </div>
             <video muted autoplay id="video" playsinline="true"></video>
         </div>
     </div>
-
-	<!-- <script src="obj.js"></script>
-    <script src="enemy.js"></script>
-    <script src="item.js"></script>
-	<script src="project.js"></script>
-    <script async src="zxing.js"></script>
-    <script src="video.js"></script> -->
 </body>
 </html>
